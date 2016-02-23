@@ -1,7 +1,6 @@
 package br.com.xavier.matrix.abstraction;
 
 import java.lang.reflect.Array;
-import java.lang.reflect.ParameterizedType;
 
 import br.com.xavier.matrix.impl.parser.DefaultMatrixParser;
 import br.com.xavier.matrix.interfaces.Matrix;
@@ -16,16 +15,7 @@ public abstract class AbstractMatrix<T> implements Matrix<T> {
 	private int columns;
 	private int rows;
 	protected T[][] matrix;
-	
-	//XXX STATIC BLOCK
-	private Class<T> clazz;
-    { initClazz(); }
     
-    @SuppressWarnings("unchecked")
-    private void initClazz() {
-    	this.clazz = (Class<T>) ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
-    }
-	
     //XXX CONSTRUCTOR
 	public AbstractMatrix(int columns, int rows) {
 		this.matrixParser = new DefaultMatrixParser<T>();
@@ -97,7 +87,7 @@ public abstract class AbstractMatrix<T> implements Matrix<T> {
 		Util.checkInvalidColumnIndex(this, column);
 		Util.checkInvalidRowIndex(this, row);
 		
-		return matrix[column][row];
+		return (T) matrix[column][row];
 	}
 	
 	@Override
@@ -112,13 +102,16 @@ public abstract class AbstractMatrix<T> implements Matrix<T> {
 	
 	@Override
 	public boolean checkEmpty(T obj) {
+		if(obj == null && representsEmpty() == null){
+			return true;
+		}
 		return obj.equals(representsEmpty());
 	}
 	
 	//XXX PROTECTED METHODS
 	@SuppressWarnings("unchecked")
-	protected T[][] fabricateMatrix(int columns, int rows){
-		return (T[][])Array.newInstance(clazz, columns, rows);
+	protected T[][] fabricateMatrix(int columns, int rows){		
+		return (T[][]) Array.newInstance(Object.class, columns, rows);
 	}
 	
 	//XXX PRIVATE METHODS
