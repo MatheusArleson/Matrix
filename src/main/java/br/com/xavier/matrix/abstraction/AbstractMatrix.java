@@ -3,17 +3,22 @@ package br.com.xavier.matrix.abstraction;
 import java.lang.reflect.Array;
 import java.lang.reflect.ParameterizedType;
 
+import br.com.xavier.matrix.impl.DefaultMatrixParser;
 import br.com.xavier.matrix.interfaces.Matrix;
+import br.com.xavier.matrix.interfaces.MatrixParser;
+import br.com.xavier.matrix.util.messages.Util;
 
 public abstract class AbstractMatrix<G> implements Matrix<G> {
 	
 	//XXX CLASS PROPERTIES
+	private MatrixParser<G> matrixParser;
+	
 	private int columns;
 	private int rows;
 	protected G[][] matrix;
 	
 	//XXX STATIC BLOCK
-	Class<G> clazz;
+	private Class<G> clazz;
     { initClazz(); }
     
     @SuppressWarnings("unchecked")
@@ -23,6 +28,7 @@ public abstract class AbstractMatrix<G> implements Matrix<G> {
 	
     //XXX CONSTRUCTOR
 	public AbstractMatrix(int columns, int rows) {
+		this.matrixParser = new DefaultMatrixParser<G>();
 		this.columns = columns;
 		this.rows = rows;
 		this.matrix = fabricateMatrix(columns, rows);
@@ -57,6 +63,8 @@ public abstract class AbstractMatrix<G> implements Matrix<G> {
 	
 	@Override
 	public void removeColumn(int columnNumber) {
+		Util.checkInvalidColumnIndex(this, columnNumber);
+		
 		this.columns = this.columns - 1;
 		G[][] newMatrix = fabricateMatrix(columns, rows);
 		copyContent(newMatrix, columnNumber, -1);
@@ -65,6 +73,8 @@ public abstract class AbstractMatrix<G> implements Matrix<G> {
 	
 	@Override
 	public void removeRow(int rowNumber) {
+		Util.checkInvalidRowIndex(this, rowNumber);
+		
 		this.rows = this.rows - 1;
 		G[][] newMatrix = fabricateMatrix(columns, rows);
 		copyContent(newMatrix, -1, rowNumber);
@@ -73,6 +83,8 @@ public abstract class AbstractMatrix<G> implements Matrix<G> {
 	
 	@Override
 	public void removeColumAndRow(int colRowNumber) {
+		Util.checkInvalidColumnRowIndex(this, colRowNumber);
+		
 		this.columns = this.columns - 1;
 		this.rows = this.rows - 1;
 		G[][] newMatrix = fabricateMatrix(columns, rows);
@@ -82,11 +94,17 @@ public abstract class AbstractMatrix<G> implements Matrix<G> {
 	
 	@Override
 	public G get(int column, int row) {
+		Util.checkInvalidColumnIndex(this, column);
+		Util.checkInvalidColumnRowIndex(this, row);
+		
 		return matrix[column][row];
 	}
 	
 	@Override
 	public G set(int column, int row, G obj) {
+		Util.checkInvalidColumnIndex(this, column);
+		Util.checkInvalidColumnRowIndex(this, row);
+		
 		G previousObj = matrix[column][row];
 		matrix[column][row] = obj;
 		return previousObj;
@@ -120,29 +138,19 @@ public abstract class AbstractMatrix<G> implements Matrix<G> {
 		}
 	}
 	
-	//XXX TO STRING METHODS
 	@Override
 	public String toString() {
-		String emptyStr = representsEmpty().toString();
-		
-		StringBuilder result = new StringBuilder(rows * (columns + 1));
-		for (int y = 0; y < rows; y++) {
-			for (int x = 0; x < columns; x++) {
-				G obj = get(x, y);
-				boolean isEmpty = checkEmpty(obj);
-				result.append(isEmpty ? emptyStr : obj.toString());
-			}
-			result.append("\n");
-		}
-		return result.toString();
-	}
-
-	//XXX GETTERS
-	public int getHeight() {
-		return rows;
+		return matrixParser.toString(this);
 	}
 	
-	public int getWidth() {
+	//XXX GETTERS
+	@Override
+	public int getColumnCount() {
 		return columns;
+	}
+	
+	@Override
+	public int getRowCount() {
+		return rows;
 	}
 }
