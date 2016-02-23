@@ -45,6 +45,6 @@ public class Util {
 	
 	public static void checkInvalidColumnRowIndex(Matrix<?> matrix, int columnIndex){
 		checkInvalidColumnIndex(matrix, columnIndex);
-		checkInvalidColumnRowIndex(matrix, columnIndex);
+		checkInvalidRowIndex(matrix, columnIndex);
 	}
 }

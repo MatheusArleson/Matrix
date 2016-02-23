@@ -31,9 +31,4 @@ public class BitSquareMatrix extends SquareMatrix<Integer> {
 		this.matrix[column][row] = 0;
 		return oldValue;
 	}
-
-	public static void main(String[] args) {
-		BitSquareMatrix bsm = new BitSquareMatrix(4);
-		System.out.println(bsm.toString());
-	}
 }

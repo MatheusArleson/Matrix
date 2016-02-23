@@ -3,32 +3,32 @@ package br.com.xavier.matrix.abstraction;
 import java.lang.reflect.Array;
 import java.lang.reflect.ParameterizedType;
 
-import br.com.xavier.matrix.impl.DefaultMatrixParser;
+import br.com.xavier.matrix.impl.parser.DefaultMatrixParser;
 import br.com.xavier.matrix.interfaces.Matrix;
-import br.com.xavier.matrix.interfaces.MatrixParser;
+import br.com.xavier.matrix.interfaces.parser.MatrixParser;
 import br.com.xavier.matrix.util.messages.Util;
 
-public abstract class AbstractMatrix<G> implements Matrix<G> {
+public abstract class AbstractMatrix<T> implements Matrix<T> {
 	
 	//XXX CLASS PROPERTIES
-	private MatrixParser<G> matrixParser;
+	private MatrixParser<T> matrixParser;
 	
 	private int columns;
 	private int rows;
-	protected G[][] matrix;
+	protected T[][] matrix;
 	
 	//XXX STATIC BLOCK
-	private Class<G> clazz;
+	private Class<T> clazz;
     { initClazz(); }
     
     @SuppressWarnings("unchecked")
     private void initClazz() {
-    	this.clazz = (Class<G>) ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+    	this.clazz = (Class<T>) ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
     }
 	
     //XXX CONSTRUCTOR
 	public AbstractMatrix(int columns, int rows) {
-		this.matrixParser = new DefaultMatrixParser<G>();
+		this.matrixParser = new DefaultMatrixParser<T>();
 		this.columns = columns;
 		this.rows = rows;
 		this.matrix = fabricateMatrix(columns, rows);
@@ -48,7 +48,7 @@ public abstract class AbstractMatrix<G> implements Matrix<G> {
 	@Override
 	public void addColumn() {
 		this.columns = this.columns + 1;
-		G[][] newMatrix = fabricateMatrix(columns, rows);
+		T[][] newMatrix = fabricateMatrix(columns, rows);
 		copyContent(newMatrix, -1, -1);
 		this.matrix = newMatrix;
 	}
@@ -56,7 +56,7 @@ public abstract class AbstractMatrix<G> implements Matrix<G> {
 	@Override
 	public void addRow() {
 		this.rows = this.rows + 1;
-		G[][] newMatrix = fabricateMatrix(columns, rows);
+		T[][] newMatrix = fabricateMatrix(columns, rows);
 		copyContent(newMatrix, -1, -1);
 		this.matrix = newMatrix;
 	}
@@ -66,7 +66,7 @@ public abstract class AbstractMatrix<G> implements Matrix<G> {
 		Util.checkInvalidColumnIndex(this, columnNumber);
 		
 		this.columns = this.columns - 1;
-		G[][] newMatrix = fabricateMatrix(columns, rows);
+		T[][] newMatrix = fabricateMatrix(columns, rows);
 		copyContent(newMatrix, columnNumber, -1);
 		this.matrix = newMatrix;
 	}
@@ -76,7 +76,7 @@ public abstract class AbstractMatrix<G> implements Matrix<G> {
 		Util.checkInvalidRowIndex(this, rowNumber);
 		
 		this.rows = this.rows - 1;
-		G[][] newMatrix = fabricateMatrix(columns, rows);
+		T[][] newMatrix = fabricateMatrix(columns, rows);
 		copyContent(newMatrix, -1, rowNumber);
 		this.matrix = newMatrix;
 	}
@@ -87,42 +87,42 @@ public abstract class AbstractMatrix<G> implements Matrix<G> {
 		
 		this.columns = this.columns - 1;
 		this.rows = this.rows - 1;
-		G[][] newMatrix = fabricateMatrix(columns, rows);
+		T[][] newMatrix = fabricateMatrix(columns, rows);
 		copyContent(newMatrix, colRowNumber, colRowNumber);
 		this.matrix = newMatrix;
 	}
 	
 	@Override
-	public G get(int column, int row) {
+	public T get(int column, int row) {
 		Util.checkInvalidColumnIndex(this, column);
-		Util.checkInvalidColumnRowIndex(this, row);
+		Util.checkInvalidRowIndex(this, row);
 		
 		return matrix[column][row];
 	}
 	
 	@Override
-	public G set(int column, int row, G obj) {
+	public T set(int column, int row, T obj) {
 		Util.checkInvalidColumnIndex(this, column);
 		Util.checkInvalidColumnRowIndex(this, row);
 		
-		G previousObj = matrix[column][row];
+		T previousObj = matrix[column][row];
 		matrix[column][row] = obj;
 		return previousObj;
 	}
 	
 	@Override
-	public boolean checkEmpty(G obj) {
+	public boolean checkEmpty(T obj) {
 		return obj.equals(representsEmpty());
 	}
 	
 	//XXX PROTECTED METHODS
 	@SuppressWarnings("unchecked")
-	protected G[][] fabricateMatrix(int columns, int rows){
-		return (G[][])Array.newInstance(clazz, columns, rows);
+	protected T[][] fabricateMatrix(int columns, int rows){
+		return (T[][])Array.newInstance(clazz, columns, rows);
 	}
 	
 	//XXX PRIVATE METHODS
-	private void copyContent(G[][] newMatrix, int removedColumn, int removedRow) {
+	private void copyContent(T[][] newMatrix, int removedColumn, int removedRow) {
 		for (int column = 0; column < matrix.length; column++) {
 			if(column == removedColumn){
 				continue;
