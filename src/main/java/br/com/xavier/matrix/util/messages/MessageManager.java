@@ -10,7 +10,7 @@ import br.com.xavier.matrix.util.messages.enums.DefaultMessagesKey;
  * @author Matheus Xavier
  *
  */
-public class MessageManager {
+public final class MessageManager {
 	
 	private static final String MESSAGES_FILE_NAME = "messages";
 	private static final ResourceBundle MESSAGE_BUNDLE = ResourceBundle.getBundle(MESSAGES_FILE_NAME);

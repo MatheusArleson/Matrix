@@ -21,7 +21,7 @@ public class DefaultMatrixParserTest {
 	
 	@Test
 	public void fromStringTest() throws IOException, InvalidMatrixRepresentation {
-		DefaultMatrixParser<Integer> parser = new DefaultMatrixParser<Integer>();
+		DefaultMatrixParser<Integer> parser = new DefaultMatrixParser<Integer>("[\n", "\n]", "\n", ",");
 		
 		String matrixString = new String(
 			"[\n" +
@@ -32,7 +32,7 @@ public class DefaultMatrixParserTest {
 			"\n]"
 		); 
 		
-		DefaultMatrix<Integer> fromStringMatrix = parser.fromString(matrixString, "[\n", "\n]", "\n", ",");
+		DefaultMatrix<Integer> fromStringMatrix = parser.fromString(matrixString);
 		String matrixStr = fromStringMatrix.toString();
 		
 		Assert.assertEquals(matrixString, matrixStr);

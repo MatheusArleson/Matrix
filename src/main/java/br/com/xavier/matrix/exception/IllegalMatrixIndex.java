@@ -7,7 +7,7 @@ package br.com.xavier.matrix.exception;
  * @author Matheus Xavier
  *
  */
-public class IllegalMatrixIndex extends RuntimeException {
+public final class IllegalMatrixIndex extends RuntimeException {
 
 	private static final long serialVersionUID = -220465570739804127L;
 	

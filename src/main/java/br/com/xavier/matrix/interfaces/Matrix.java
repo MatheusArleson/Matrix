@@ -5,6 +5,7 @@ public abstract interface Matrix<T> {
 	public void clear();
 	public void addColumn();
 	public void addRow();
+	public void addColumAndRow();
 	public void removeColumn(int columnNumber);
 	public void removeRow(int rowNumber);
 	public void removeColumAndRow(int colRowNumber);

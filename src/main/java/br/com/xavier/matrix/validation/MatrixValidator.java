@@ -1,32 +1,25 @@
-package br.com.xavier.matrix.util.messages;
+package br.com.xavier.matrix.validation;
 
 import br.com.xavier.matrix.exception.IllegalMatrixIndex;
 import br.com.xavier.matrix.interfaces.Matrix;
+import br.com.xavier.matrix.util.messages.MessageManager;
 import br.com.xavier.matrix.util.messages.enums.DefaultMessagesKey;
 
-public class Util {
+public final class MatrixValidator {
 	
 	//XXX CONSTRUCTOR
 	//defeat instantiation
-	private Util(){}
+	private MatrixValidator(){}
 
 	//XXX METHODS
-	public static void checkNullParameter(Object...objects){
-		for (Object object : objects) {
-			if(object == null){
-				handleNullParameter();
-			}
+	public static void checkInvalidRowColumnSize(int size){
+		if(size < 0){
+			throw new IllegalMatrixIndex(MessageManager.getDefaultMessage(DefaultMessagesKey.INVALID_MATRIX_INDEX));
 		}
-	}
-
-	private static void handleNullParameter() {
-		throw new NullPointerException(MessageManager.getDefaultMessage(DefaultMessagesKey.PARAMETER_NULL));
 	}
 	
 	public static void checkInvalidRowIndex(Matrix<?> matrix, int rowIndex){
-		if(rowIndex < 0){
-			throw new IllegalMatrixIndex(MessageManager.getDefaultMessage(DefaultMessagesKey.INVALID_MATRIX_INDEX));
-		}
+		checkInvalidRowColumnSize(rowIndex);
 		
 		if(rowIndex > matrix.getRowCount()){
 			throw new IllegalMatrixIndex(MessageManager.getDefaultMessage(DefaultMessagesKey.INVALID_MATRIX_INDEX));
@@ -34,9 +27,7 @@ public class Util {
 	}
 	
 	public static void checkInvalidColumnIndex(Matrix<?> matrix, int columnIndex){
-		if(columnIndex < 0){
-			throw new IllegalMatrixIndex(MessageManager.getDefaultMessage(DefaultMessagesKey.INVALID_MATRIX_INDEX));
-		}
+		checkInvalidRowColumnSize(columnIndex);
 		
 		if(columnIndex > matrix.getColumnCount()){
 			throw new IllegalMatrixIndex(MessageManager.getDefaultMessage(DefaultMessagesKey.INVALID_MATRIX_INDEX));
@@ -47,4 +38,5 @@ public class Util {
 		checkInvalidColumnIndex(matrix, columnIndex);
 		checkInvalidRowIndex(matrix, columnIndex);
 	}
+
 }

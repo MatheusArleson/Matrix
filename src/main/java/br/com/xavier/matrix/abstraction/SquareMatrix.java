@@ -3,7 +3,7 @@ package br.com.xavier.matrix.abstraction;
 import br.com.xavier.matrix.util.messages.MessageManager;
 import br.com.xavier.matrix.util.messages.enums.DefaultMessagesKey;
 
-public abstract class SquareMatrix<G> extends AbstractMatrix<G> {
+public abstract class SquareMatrix<T> extends AbstractMatrix<T> {
 	
 	//XXX CONSTRUCTOR
 	public SquareMatrix(int size) {

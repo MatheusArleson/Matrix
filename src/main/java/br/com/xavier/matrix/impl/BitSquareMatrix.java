@@ -4,7 +4,7 @@ import br.com.xavier.matrix.abstraction.SquareMatrix;
 import br.com.xavier.matrix.util.messages.MessageManager;
 import br.com.xavier.matrix.util.messages.enums.DefaultMessagesKey;
 
-public class BitSquareMatrix extends SquareMatrix<Integer> {
+public final class BitSquareMatrix extends SquareMatrix<Integer> {
 
 	public BitSquareMatrix(int size) {
 		super(size);

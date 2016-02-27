@@ -5,7 +5,7 @@ import java.lang.reflect.Array;
 import br.com.xavier.matrix.impl.parser.DefaultMatrixParser;
 import br.com.xavier.matrix.interfaces.Matrix;
 import br.com.xavier.matrix.interfaces.parser.MatrixParser;
-import br.com.xavier.matrix.util.messages.Util;
+import br.com.xavier.matrix.validation.MatrixValidator;
 
 public abstract class AbstractMatrix<T> implements Matrix<T> {
 	
@@ -18,6 +18,9 @@ public abstract class AbstractMatrix<T> implements Matrix<T> {
     
     //XXX CONSTRUCTOR
 	public AbstractMatrix(int columns, int rows) {
+		MatrixValidator.checkInvalidRowColumnSize(columns);
+		MatrixValidator.checkInvalidRowColumnSize(rows);
+		
 		this.matrixParser = new DefaultMatrixParser<T>();
 		this.columns = columns;
 		this.rows = rows;
@@ -52,8 +55,17 @@ public abstract class AbstractMatrix<T> implements Matrix<T> {
 	}
 	
 	@Override
+	public void addColumAndRow() {
+		this.columns = this.columns + 1;
+		this.rows = this.rows + 1;
+		T[][] newMatrix = fabricateMatrix(columns, rows);
+		copyContent(newMatrix, -1, -1);
+		this.matrix = newMatrix;
+	}
+	
+	@Override
 	public void removeColumn(int columnNumber) {
-		Util.checkInvalidColumnIndex(this, columnNumber);
+		MatrixValidator.checkInvalidColumnIndex(this, columnNumber);
 		
 		this.columns = this.columns - 1;
 		T[][] newMatrix = fabricateMatrix(columns, rows);
@@ -63,7 +75,7 @@ public abstract class AbstractMatrix<T> implements Matrix<T> {
 	
 	@Override
 	public void removeRow(int rowNumber) {
-		Util.checkInvalidRowIndex(this, rowNumber);
+		MatrixValidator.checkInvalidRowIndex(this, rowNumber);
 		
 		this.rows = this.rows - 1;
 		T[][] newMatrix = fabricateMatrix(columns, rows);
@@ -73,7 +85,7 @@ public abstract class AbstractMatrix<T> implements Matrix<T> {
 	
 	@Override
 	public void removeColumAndRow(int colRowNumber) {
-		Util.checkInvalidColumnRowIndex(this, colRowNumber);
+		MatrixValidator.checkInvalidColumnRowIndex(this, colRowNumber);
 		
 		this.columns = this.columns - 1;
 		this.rows = this.rows - 1;
@@ -84,16 +96,16 @@ public abstract class AbstractMatrix<T> implements Matrix<T> {
 	
 	@Override
 	public T get(int column, int row) {
-		Util.checkInvalidColumnIndex(this, column);
-		Util.checkInvalidRowIndex(this, row);
+		MatrixValidator.checkInvalidColumnIndex(this, column);
+		MatrixValidator.checkInvalidRowIndex(this, row);
 		
 		return (T) matrix[column][row];
 	}
 	
 	@Override
 	public T set(int column, int row, T obj) {
-		Util.checkInvalidColumnIndex(this, column);
-		Util.checkInvalidColumnRowIndex(this, row);
+		MatrixValidator.checkInvalidColumnIndex(this, column);
+		MatrixValidator.checkInvalidColumnRowIndex(this, row);
 		
 		T previousObj = matrix[column][row];
 		matrix[column][row] = obj;
@@ -102,9 +114,10 @@ public abstract class AbstractMatrix<T> implements Matrix<T> {
 	
 	@Override
 	public boolean checkEmpty(T obj) {
-		if(obj == null && representsEmpty() == null){
-			return true;
+		if(obj == null){
+			return ( representsEmpty() == null );
 		}
+		
 		return obj.equals(representsEmpty());
 	}
 	

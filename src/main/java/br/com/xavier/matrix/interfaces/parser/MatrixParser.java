@@ -8,6 +8,6 @@ import br.com.xavier.matrix.interfaces.Matrix;
 public interface MatrixParser<T> {
 	
 	public String toString(Matrix<T> matrix);
-	public DefaultMatrix fromString(String matrixString, String startDelimiter, String endDelimiter, String rowSeparator, String rowElementsSeparator) throws IOException;
+	public DefaultMatrix<T> fromString(String matrixString) throws IOException;
 
 }
