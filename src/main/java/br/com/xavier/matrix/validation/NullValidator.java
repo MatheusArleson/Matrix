@@ -10,6 +10,10 @@ public final class NullValidator {
 	public NullValidator() {}
 	
 	public static void checkNullParameter(Object...objects){
+		if(objects == null){
+			handleNullParameter();
+		}
+		
 		for (Object object : objects) {
 			if(object == null){
 				handleNullParameter();

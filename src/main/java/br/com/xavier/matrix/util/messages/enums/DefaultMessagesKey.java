@@ -15,7 +15,8 @@ public enum DefaultMessagesKey {
 	EMPTY_MATRIX("matrix.empty"),
 	UNSUPPORTED_OPERATION_EXCEPTION("exception.operation.unsupported"), 
 	INVALID_MATRIX_INDEX("matrix.index.invalid"), 
-	INVALID_MATRIX_REPRESENTATION("matrix.representation.invalid");
+	INVALID_MATRIX_REPRESENTATION("matrix.representation.invalid"),
+	ILLEGAL_OBJECT_INDEX("obj.index.illegal");
 	
 	//XXX ENUM PROPERTIES
 	private final String key;

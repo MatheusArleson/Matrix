@@ -3,15 +3,19 @@ package br.com.xavier.matrix.impl.parser;
 import java.util.ArrayList;
 import java.util.Map;
 
-import br.com.xavier.matrix.abstraction.parser.AbstractMatrixParser;
-import br.com.xavier.matrix.impl.DefaultMatrix;
+import br.com.xavier.matrix.abstraction.SquareMatrix;
+import br.com.xavier.matrix.abstraction.parser.AbstractSquareMatrixParser;
+import br.com.xavier.matrix.exception.InvalidMatrixRepresentation;
+import br.com.xavier.matrix.impl.DefaultSquareMatrix;
+import br.com.xavier.matrix.util.messages.MessageManager;
+import br.com.xavier.matrix.util.messages.enums.DefaultMessagesKey;
 
-public class DefaultMatrixParser<T> extends AbstractMatrixParser<T> {
-	
+public class DefaultSquareMatrixParser<T> extends AbstractSquareMatrixParser<T> {
+
 	private static final DefaultParserValues DEFAULT_PARSER_VALUES = new DefaultParserValues();
 	
 	//XXX CONSTRUCTOR
-	public DefaultMatrixParser() {
+	public DefaultSquareMatrixParser() {
 		super(
 			DEFAULT_PARSER_VALUES.getRepresentationStartDelimiter(), 
 			DEFAULT_PARSER_VALUES.getRepresentationEndDelimiter(), 
@@ -22,7 +26,7 @@ public class DefaultMatrixParser<T> extends AbstractMatrixParser<T> {
 		);
 	}
 	
-	public DefaultMatrixParser(
+	public DefaultSquareMatrixParser(
 		String representationStartDelimiter, 
 		String representationEndDelimiter,
 		String matrixRepresentatitionStartDelimiter, 
@@ -41,34 +45,38 @@ public class DefaultMatrixParser<T> extends AbstractMatrixParser<T> {
 	}
 
 	@Override
-	public DefaultMatrix<T> generateEmptyMatrix() {
-		return new DefaultMatrix<T>(this, 0, 0);
+	public SquareMatrix<T> generateEmptyMatrix() {
+		return new DefaultSquareMatrix<T>(this, 0);
 	}
-	
+
 	@Override
-	public DefaultMatrix<T> generateMatrix(Map<Integer, ArrayList<T>> map, int columnsSize) {
-		int rows = map.keySet().size();
+	public SquareMatrix<T> generateMatrix(Map<Integer, ArrayList<T>> map, int columnsSize) {
+		int rowCount = map.keySet().size();
+		if(rowCount != columnsSize){
+			throw new InvalidMatrixRepresentation(MessageManager.getDefaultMessage(DefaultMessagesKey.INVALID_MATRIX_REPRESENTATION));
+		}
 		
-		DefaultMatrix<T> dm = new DefaultMatrix<T>(this, columnsSize, rows);
+		DefaultSquareMatrix<T> dsm = new DefaultSquareMatrix<T>(this, rowCount);
 		
 		for (Integer rowNumber : map.keySet()) {
 			ArrayList<T> rowElements = map.get(rowNumber);
 			for (int columnNumber = 0; columnNumber < rowElements.size(); columnNumber++) {
-				dm.set(columnNumber, rowNumber, rowElements.get(columnNumber));
+				dsm.set(columnNumber, rowNumber, rowElements.get(columnNumber));
 			}
 		}
 		
-		if(dm.representsEmpty() != null){
-			for (int col = 0; col < dm.getColumnCount(); col++) {
-				for (int row = 0; row < dm.getRowCount(); row++) {
-					boolean isNull = (dm.get(col, row) == null);
+		if(dsm.representsEmpty() != null){
+			for (int col = 0; col < dsm.getColumnCount(); col++) {
+				for (int row = 0; row < dsm.getRowCount(); row++) {
+					boolean isNull = (dsm.get(col, row) == null);
 					if(isNull){
-						dm.set(col, row, dm.representsEmpty());
+						dsm.set(col, row, dsm.representsEmpty());
 					}
 				}
 			}
 		}
 		
-		return dm;
+		return dsm;
 	}
+
 }

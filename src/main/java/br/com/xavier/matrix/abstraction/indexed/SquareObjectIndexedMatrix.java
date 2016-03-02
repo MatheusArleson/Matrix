@@ -1,38 +1,33 @@
-package br.com.xavier.matrix.abstraction;
+package br.com.xavier.matrix.abstraction.indexed;
 
-import br.com.xavier.matrix.abstraction.parser.AbstractSquareMatrixParser;
+import br.com.xavier.matrix.abstraction.SquareMatrix;
 import br.com.xavier.matrix.util.messages.MessageManager;
 import br.com.xavier.matrix.util.messages.enums.DefaultMessagesKey;
 
-public abstract class SquareMatrix<T> extends AbstractMatrix<T> {
+public abstract class SquareObjectIndexedMatrix<O, M extends SquareMatrix<T>, T> extends AbstractObjectIndexedMatrix<O, M, T>{
 	
-	//XXX CONSTRUCTOR
-	public SquareMatrix(AbstractSquareMatrixParser<T> parser) {
-		super(parser, 0, 0);
+	public SquareObjectIndexedMatrix() throws Exception {
+		super();
 	}
 	
-	public SquareMatrix(AbstractSquareMatrixParser<T> parser, int size) {
-		super(parser, size, size);
-	}
-
-	//XXX OVERRIDE METHODS
 	@Override
-	public void addColumn() {
+	public void addColumn(O obj) {
 		throw new UnsupportedOperationException(MessageManager.getDefaultMessage(DefaultMessagesKey.UNSUPPORTED_OPERATION_EXCEPTION));
 	}
 
 	@Override
-	public void addRow() {
+	public void addRow(O obj) {
 		throw new UnsupportedOperationException(MessageManager.getDefaultMessage(DefaultMessagesKey.UNSUPPORTED_OPERATION_EXCEPTION));
 	}
 
 	@Override
-	public void removeColumn(int columnNumber) {
+	public void removeColumn(O obj) {
 		throw new UnsupportedOperationException(MessageManager.getDefaultMessage(DefaultMessagesKey.UNSUPPORTED_OPERATION_EXCEPTION));
 	}
 	
 	@Override
-	public void removeRow(int rowNumber) {
+	public void removeRow(O obj) {
 		throw new UnsupportedOperationException(MessageManager.getDefaultMessage(DefaultMessagesKey.UNSUPPORTED_OPERATION_EXCEPTION));
 	}
+	
 }

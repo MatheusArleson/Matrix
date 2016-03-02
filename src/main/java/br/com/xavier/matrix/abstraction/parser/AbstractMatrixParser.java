@@ -1,52 +1,39 @@
 package br.com.xavier.matrix.abstraction.parser;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import br.com.xavier.matrix.exception.InvalidMatrixRepresentation;
-import br.com.xavier.matrix.exception.InvalidMatrixRepresentationDelimiter;
-import br.com.xavier.matrix.impl.DefaultMatrix;
 import br.com.xavier.matrix.interfaces.Matrix;
 import br.com.xavier.matrix.interfaces.parser.MatrixParser;
 import br.com.xavier.matrix.util.messages.MessageManager;
 import br.com.xavier.matrix.util.messages.enums.DefaultMessagesKey;
-import br.com.xavier.matrix.validation.StringValidator;
 
-public abstract class AbstractMatrixParser<T> implements MatrixParser<T> {
-	
-	private String startDelimiter; 
-	private String endDelimiter;
-	private String rowSeparator; 
-	private String rowElementsSeparator;
+public abstract class AbstractMatrixParser<T> extends AbstractParser implements MatrixParser<T> {
 	
 	public AbstractMatrixParser(
-		String startDelimiter, 
-		String endDelimiter, 
-		String rowSeparator,
-		String rowElementsSeparator
+		String representationStartDelimiter, 
+		String representationEndDelimiter,
+		String matrixRepresentatitionStartDelimiter, 
+		String matrixRepresentatitionEndDelimiter,
+		String matrixRepresentationRowSeparator, 
+		String matrixRepresentationRowElementsSeparator
 	) {
-		super();
-		
-		boolean isInvalid = StringValidator.anyNullOrEmpty(
-			startDelimiter, endDelimiter, rowSeparator, rowElementsSeparator
+		super(
+			representationStartDelimiter, 
+			representationEndDelimiter, 
+			matrixRepresentatitionStartDelimiter,
+			matrixRepresentatitionEndDelimiter, 
+			matrixRepresentationRowSeparator, 
+			matrixRepresentationRowElementsSeparator
 		);
-		
-		if(isInvalid){
-			throw new InvalidMatrixRepresentationDelimiter();
-		}
-		
-		this.startDelimiter = startDelimiter;
-		this.endDelimiter = endDelimiter;
-		this.rowSeparator = rowSeparator;
-		this.rowElementsSeparator = rowElementsSeparator;
 	}
 
 	@Override
 	public String toString(Matrix<T> matrix) {
 		if(matrix == null){
-			return MessageManager.getDefaultMessage(DefaultMessagesKey.EMPTY_MATRIX);
+			throw new NullPointerException(MessageManager.getDefaultMessage(DefaultMessagesKey.INVALID_MATRIX_REPRESENTATION));
 		}
 		
 		T empty = matrix.representsEmpty();
@@ -55,44 +42,54 @@ public abstract class AbstractMatrixParser<T> implements MatrixParser<T> {
 		int columns = matrix.getColumnCount();
 		int rows = matrix.getRowCount();
 		
-		StringBuilder sb = new StringBuilder(rows * (columns + 1));
-		sb.append(startDelimiter + rowSeparator);
+		StringBuilder sb = new StringBuilder();
+		sb.append(getRepresentationStartDelimiter());
+		sb.append(getMatrixRepresentatitionStartDelimiter());
+		
 		for (int rowCount = 0; rowCount < rows; rowCount++) {
+			StringBuffer rowBuffer = new StringBuffer();
+			
 			for (int columnCount = 0; columnCount < columns; columnCount++) {
-				boolean isEmpty = matrix.checkEmpty(matrix.get(columnCount, rowCount));
-				sb.append(isEmpty ? emptyRepresentation : matrix.get(columnCount, rowCount).toString());
-				sb.append(rowElementsSeparator);
+				
+				T matrixElement = matrix.get(columnCount, rowCount);
+				boolean isEmpty = matrix.checkEmpty(matrixElement);
+				rowBuffer.append(isEmpty ? emptyRepresentation : matrixElement.toString());
+				rowBuffer.append(getMatrixRepresentationRowElementsSeparator());
 			}
-			sb.append(rowSeparator);
+			
+			String lineStr = rowBuffer.toString();
+			if(lineStr.endsWith(getMatrixRepresentationRowElementsSeparator())){
+				lineStr = lineStr.substring(0, lineStr.length() - getMatrixRepresentationRowElementsSeparator().length());
+			}
+			
+			sb.append(lineStr);
+			sb.append(getMatrixRepresentationRowSeparator());
 		}
-		String result = sb.substring(0, sb.length() - 2);
-		result = result + rowSeparator + endDelimiter;
-		return result;
+		
+		sb.append(getMatrixRepresentatitionEndDelimiter());
+		sb.append(getRepresentationEndDelimiter());
+		return sb.toString();
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public DefaultMatrix<T> fromString(String matrixString) throws IOException, InvalidMatrixRepresentation {
+	public Matrix<T> fromString(String matrixString) throws InvalidMatrixRepresentation {
 		
-		validate(matrixString);
-		matrixString = strip(matrixString, startDelimiter, endDelimiter);
+		matrixString = validate(matrixString);
 		
 		if(matrixString.isEmpty()){
-			return new DefaultMatrix<T>(0, 0);
+			return generateEmptyMatrix();
 		}
 		
-		String[] lines = matrixString.split(rowSeparator);
+		String[] lines = matrixString.split(getMatrixRepresentationRowSeparator());
 		int rows = lines.length;
 		int columns = 0;
 		
 		Map<Integer, ArrayList<T>> map = new LinkedHashMap<Integer, ArrayList<T>>();
-		for (int lineNumber = 0; lineNumber < lines.length; lineNumber++) {
-			String line = lines[lineNumber];
-			if(line.endsWith(rowElementsSeparator)){
-				line = line.substring(0, line.length() - 1);
-			}
+		for (int lineNumber = 0; lineNumber < rows; lineNumber++) {
 			
-			String[] elements = line.split(rowElementsSeparator);
+			String line = lines[lineNumber];
+			String[] elements = line.split(getMatrixRepresentationRowElementsSeparator());
 			if(elements.length > columns){
 				columns = elements.length;
 			}
@@ -105,60 +102,10 @@ public abstract class AbstractMatrixParser<T> implements MatrixParser<T> {
 			}
 		}
 		
-		DefaultMatrix<T> dm = new DefaultMatrix<T>(columns, rows);
-		
-		for (Integer rowNumber : map.keySet()) {
-			ArrayList<T> rowElements = map.get(rowNumber);
-			for (int columnNumber = 0; columnNumber < rowElements.size(); columnNumber++) {
-				dm.set(columnNumber, rowNumber, rowElements.get(columnNumber));
-			}
-		}
-		
-		if(dm.representsEmpty() != null){
-			for (int col = 0; col < dm.getColumnCount(); col++) {
-				for (int row = 0; row < dm.getRowCount(); row++) {
-					boolean isNull = (dm.get(col, row) == null);
-					if(isNull){
-						dm.set(col, row, dm.representsEmpty());
-					}
-				}
-			}
-		}
-		
-		return dm;
+		return generateMatrix(map, columns);
 	}
-	
-	private void validate(String matrixString) {
-		if(StringValidator.isNullOrEmpty(matrixString)){
-			throw new InvalidMatrixRepresentation(MessageManager.getDefaultMessage(DefaultMessagesKey.INVALID_MATRIX_REPRESENTATION));
-		}
-		
-		if(!matrixString.startsWith(startDelimiter)){
-			throw new InvalidMatrixRepresentation(MessageManager.getDefaultMessage(DefaultMessagesKey.INVALID_MATRIX_REPRESENTATION));
-		}
-		
-		if(!matrixString.endsWith(endDelimiter)){
-			throw new InvalidMatrixRepresentation(MessageManager.getDefaultMessage(DefaultMessagesKey.INVALID_MATRIX_REPRESENTATION));
-		}
-		
-		boolean isEmptyMatrix = matrixString.length() == startDelimiter.length() + endDelimiter.length();
-		if(!isEmptyMatrix){
-			if(!matrixString.contains(rowSeparator)){
-				throw new InvalidMatrixRepresentation(MessageManager.getDefaultMessage(DefaultMessagesKey.INVALID_MATRIX_REPRESENTATION));
-			}
-			
-			if(!matrixString.contains(rowElementsSeparator)){
-				throw new InvalidMatrixRepresentation(MessageManager.getDefaultMessage(DefaultMessagesKey.INVALID_MATRIX_REPRESENTATION));
-			}			
-		}
-	}
-	
-	private String strip(String matrixString, String startDelimiter, String endDelimiter){
-		//removes the start and end delimiters
-		int indexOfStartDelimiter = matrixString.indexOf(startDelimiter) + startDelimiter.length();
-		int indexOfEndDelimiter = matrixString.indexOf(endDelimiter);
-		matrixString = matrixString.substring(indexOfStartDelimiter, indexOfEndDelimiter);
-		
-		return matrixString;
-	}
+
+	public abstract Matrix<T> generateEmptyMatrix();
+
+	public abstract Matrix<T> generateMatrix(Map<Integer, ArrayList<T>> map, int columnsSize);
 }

@@ -6,6 +6,7 @@ import br.com.xavier.matrix.impl.parser.DefaultMatrixParser;
 import br.com.xavier.matrix.interfaces.Matrix;
 import br.com.xavier.matrix.interfaces.parser.MatrixParser;
 import br.com.xavier.matrix.validation.MatrixValidator;
+import br.com.xavier.matrix.validation.NullValidator;
 
 public abstract class AbstractMatrix<T> implements Matrix<T> {
 	
@@ -17,11 +18,16 @@ public abstract class AbstractMatrix<T> implements Matrix<T> {
 	protected T[][] matrix;
     
     //XXX CONSTRUCTOR
-	public AbstractMatrix(int columns, int rows) {
+	public AbstractMatrix(MatrixParser<T> parser) {
+		this(parser, 0, 0);
+	}
+	
+	public AbstractMatrix(MatrixParser<T> parser, int columns, int rows) {
+		NullValidator.checkNullParameter(parser);
 		MatrixValidator.checkInvalidRowColumnSize(columns);
 		MatrixValidator.checkInvalidRowColumnSize(rows);
 		
-		this.matrixParser = new DefaultMatrixParser<T>();
+		this.matrixParser = parser;
 		this.columns = columns;
 		this.rows = rows;
 		this.matrix = fabricateMatrix(columns, rows);
@@ -123,7 +129,10 @@ public abstract class AbstractMatrix<T> implements Matrix<T> {
 	
 	//XXX PROTECTED METHODS
 	@SuppressWarnings("unchecked")
-	protected T[][] fabricateMatrix(int columns, int rows){		
+	protected T[][] fabricateMatrix(int columns, int rows){
+		
+		
+		
 		return (T[][]) Array.newInstance(Object.class, columns, rows);
 	}
 	

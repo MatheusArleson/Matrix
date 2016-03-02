@@ -1,13 +1,17 @@
 package br.com.xavier.matrix.impl;
 
-import br.com.xavier.matrix.abstraction.SquareMatrix;
+import br.com.xavier.matrix.abstraction.parser.AbstractSquareMatrixParser;
 import br.com.xavier.matrix.util.messages.MessageManager;
 import br.com.xavier.matrix.util.messages.enums.DefaultMessagesKey;
 
-public final class BitSquareMatrix extends SquareMatrix<Integer> {
-
-	public BitSquareMatrix(int size) {
-		super(size);
+public final class BitSquareMatrix extends DefaultSquareMatrix<Integer> {
+	
+	public BitSquareMatrix() {
+		super();
+	}
+	
+	public BitSquareMatrix(AbstractSquareMatrixParser<Integer> parser, int size) {
+		super(parser, size);
 	}
 
 	@Override
@@ -30,5 +34,11 @@ public final class BitSquareMatrix extends SquareMatrix<Integer> {
 		Integer oldValue = this.matrix[column][row];
 		this.matrix[column][row] = 0;
 		return oldValue;
+	}
+
+	public boolean isSet(int column, int row){
+		Integer bit = get(column, row);
+		boolean isUnset = bit.equals(representsEmpty());
+		return !isUnset;
 	}
 }
