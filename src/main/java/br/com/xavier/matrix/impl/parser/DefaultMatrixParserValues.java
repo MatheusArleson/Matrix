@@ -2,7 +2,7 @@ package br.com.xavier.matrix.impl.parser;
 
 import br.com.xavier.matrix.abstraction.parser.AbstractParser;
 
-public class DefaultParserValues extends AbstractParser{
+public class DefaultMatrixParserValues extends AbstractParser{
 
 	//XXX DEFAULT PARAMETERS VALUES
 	private static final String REPRESENTATION_START_DELIMITER = "{";
@@ -12,8 +12,7 @@ public class DefaultParserValues extends AbstractParser{
 	private static final String MATRIX_ROW_SEPARATOR = "\n"; 
 	private static final String MATRIX_ROW_ELEMENTS_SEPARATOR = ",";
 	
-	protected DefaultParserValues(
-	) {
+	public DefaultMatrixParserValues() {
 		super(
 			REPRESENTATION_START_DELIMITER, 
 			REPRESENTATION_END_DELIMITER, 

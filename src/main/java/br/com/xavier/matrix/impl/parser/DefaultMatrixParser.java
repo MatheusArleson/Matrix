@@ -8,17 +8,17 @@ import br.com.xavier.matrix.impl.DefaultMatrix;
 
 public class DefaultMatrixParser<T> extends AbstractMatrixParser<T> {
 	
-	private static final DefaultParserValues DEFAULT_PARSER_VALUES = new DefaultParserValues();
+	private static final DefaultMatrixParserValues DEFAULT_PARSER_VALUES = new DefaultMatrixParserValues();
 	
 	//XXX CONSTRUCTOR
 	public DefaultMatrixParser() {
 		super(
-			DEFAULT_PARSER_VALUES.getRepresentationStartDelimiter(), 
-			DEFAULT_PARSER_VALUES.getRepresentationEndDelimiter(), 
-			DEFAULT_PARSER_VALUES.getMatrixRepresentatitionStartDelimiter(), 
-			DEFAULT_PARSER_VALUES.getMatrixRepresentatitionEndDelimiter(), 
-			DEFAULT_PARSER_VALUES.getMatrixRepresentationRowSeparator(), 
-			DEFAULT_PARSER_VALUES.getMatrixRepresentationRowElementsSeparator()
+			DEFAULT_PARSER_VALUES.getMatrixRepresentationStartDelimiter(), 
+			DEFAULT_PARSER_VALUES.getMatrixRepresentationEndDelimiter(), 
+			DEFAULT_PARSER_VALUES.getMatrixRepresentatitionMatrixStartDelimiter(), 
+			DEFAULT_PARSER_VALUES.getMatrixRepresentatitionMatrixEndDelimiter(), 
+			DEFAULT_PARSER_VALUES.getMatrixRepresentationMatrixRowSeparator(), 
+			DEFAULT_PARSER_VALUES.getMatrixRepresentationMatrixRowElementsSeparator()
 		);
 	}
 	
@@ -42,14 +42,14 @@ public class DefaultMatrixParser<T> extends AbstractMatrixParser<T> {
 
 	@Override
 	public DefaultMatrix<T> generateEmptyMatrix() {
-		return new DefaultMatrix<T>(this, 0, 0);
+		return new DefaultMatrix<T>(0, 0, this);
 	}
 	
 	@Override
 	public DefaultMatrix<T> generateMatrix(Map<Integer, ArrayList<T>> map, int columnsSize) {
 		int rows = map.keySet().size();
 		
-		DefaultMatrix<T> dm = new DefaultMatrix<T>(this, columnsSize, rows);
+		DefaultMatrix<T> dm = new DefaultMatrix<T>(columnsSize, rows, this);
 		
 		for (Integer rowNumber : map.keySet()) {
 			ArrayList<T> rowElements = map.get(rowNumber);

@@ -1,15 +1,22 @@
 package br.com.xavier.matrix.abstraction.indexed;
 
-import br.com.xavier.matrix.abstraction.SquareMatrix;
+import java.util.LinkedHashSet;
+
+import br.com.xavier.matrix.abstraction.AbstractSquareMatrix;
 import br.com.xavier.matrix.util.messages.MessageManager;
 import br.com.xavier.matrix.util.messages.enums.DefaultMessagesKey;
 
-public abstract class SquareObjectIndexedMatrix<O, M extends SquareMatrix<T>, T> extends AbstractObjectIndexedMatrix<O, M, T>{
+public abstract class AbstractSquareObjectIndexedMatrix<O, M extends AbstractSquareMatrix<T>, T> 
+				extends AbstractObjectIndexedMatrix<O, M, T>{
 	
-	public SquareObjectIndexedMatrix() throws Exception {
+	public AbstractSquareObjectIndexedMatrix() throws Exception {
 		super();
 	}
 	
+	public AbstractSquareObjectIndexedMatrix(LinkedHashSet<O> rowsSet, LinkedHashSet<O> columnsSet, M matrix) throws Exception {
+		super(rowsSet, columnsSet, matrix);
+	}
+
 	@Override
 	public void addColumn(O obj) {
 		throw new UnsupportedOperationException(MessageManager.getDefaultMessage(DefaultMessagesKey.UNSUPPORTED_OPERATION_EXCEPTION));

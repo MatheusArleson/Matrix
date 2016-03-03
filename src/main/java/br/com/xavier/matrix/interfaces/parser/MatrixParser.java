@@ -4,7 +4,7 @@ import br.com.xavier.matrix.interfaces.Matrix;
 
 public interface MatrixParser<T> {
 	
-	public String toString(Matrix<T> matrix);
-	public Matrix<T> fromString(String matrixString);
+	public String toMatrixString(Matrix<T> matrix);
+	public Matrix<T> fromMatrixString(String matrixString);
 
 }

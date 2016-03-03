@@ -3,7 +3,7 @@ package br.com.xavier.matrix.abstraction.parser;
 import java.util.ArrayList;
 import java.util.Map;
 
-import br.com.xavier.matrix.abstraction.SquareMatrix;
+import br.com.xavier.matrix.abstraction.AbstractSquareMatrix;
 
 public abstract class AbstractSquareMatrixParser<T> extends AbstractMatrixParser<T>{
 
@@ -26,9 +26,9 @@ public abstract class AbstractSquareMatrixParser<T> extends AbstractMatrixParser
 	}
 
 	@Override
-	public abstract SquareMatrix<T> generateEmptyMatrix();
+	public abstract AbstractSquareMatrix<T> generateEmptyMatrix();
 	
 	@Override
-	public abstract SquareMatrix<T> generateMatrix(Map<Integer, ArrayList<T>> map, int columnsSize);
+	public abstract AbstractSquareMatrix<T> generateMatrix(Map<Integer, ArrayList<T>> map, int columnsSize);
 
 }

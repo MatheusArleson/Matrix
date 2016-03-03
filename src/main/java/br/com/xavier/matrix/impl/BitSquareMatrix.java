@@ -1,6 +1,6 @@
 package br.com.xavier.matrix.impl;
 
-import br.com.xavier.matrix.abstraction.parser.AbstractSquareMatrixParser;
+import br.com.xavier.matrix.impl.parser.DefaultSquareMatrixParser;
 import br.com.xavier.matrix.util.messages.MessageManager;
 import br.com.xavier.matrix.util.messages.enums.DefaultMessagesKey;
 
@@ -10,8 +10,8 @@ public final class BitSquareMatrix extends DefaultSquareMatrix<Integer> {
 		super();
 	}
 	
-	public BitSquareMatrix(AbstractSquareMatrixParser<Integer> parser, int size) {
-		super(parser, size);
+	public BitSquareMatrix(DefaultSquareMatrixParser<Integer> parser, int size) {
+		super(size, parser);
 	}
 
 	@Override

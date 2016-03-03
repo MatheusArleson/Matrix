@@ -3,7 +3,6 @@ package br.com.xavier.matrix.impl.parser;
 import java.util.ArrayList;
 import java.util.Map;
 
-import br.com.xavier.matrix.abstraction.SquareMatrix;
 import br.com.xavier.matrix.abstraction.parser.AbstractSquareMatrixParser;
 import br.com.xavier.matrix.exception.InvalidMatrixRepresentation;
 import br.com.xavier.matrix.impl.DefaultSquareMatrix;
@@ -12,17 +11,17 @@ import br.com.xavier.matrix.util.messages.enums.DefaultMessagesKey;
 
 public class DefaultSquareMatrixParser<T> extends AbstractSquareMatrixParser<T> {
 
-	private static final DefaultParserValues DEFAULT_PARSER_VALUES = new DefaultParserValues();
+	private static final DefaultMatrixParserValues DEFAULT_PARSER_VALUES = new DefaultMatrixParserValues();
 	
 	//XXX CONSTRUCTOR
 	public DefaultSquareMatrixParser() {
 		super(
-			DEFAULT_PARSER_VALUES.getRepresentationStartDelimiter(), 
-			DEFAULT_PARSER_VALUES.getRepresentationEndDelimiter(), 
-			DEFAULT_PARSER_VALUES.getMatrixRepresentatitionStartDelimiter(), 
-			DEFAULT_PARSER_VALUES.getMatrixRepresentatitionEndDelimiter(), 
-			DEFAULT_PARSER_VALUES.getMatrixRepresentationRowSeparator(), 
-			DEFAULT_PARSER_VALUES.getMatrixRepresentationRowElementsSeparator()
+			DEFAULT_PARSER_VALUES.getMatrixRepresentationStartDelimiter(), 
+			DEFAULT_PARSER_VALUES.getMatrixRepresentationEndDelimiter(), 
+			DEFAULT_PARSER_VALUES.getMatrixRepresentatitionMatrixStartDelimiter(), 
+			DEFAULT_PARSER_VALUES.getMatrixRepresentatitionMatrixEndDelimiter(), 
+			DEFAULT_PARSER_VALUES.getMatrixRepresentationMatrixRowSeparator(), 
+			DEFAULT_PARSER_VALUES.getMatrixRepresentationMatrixRowElementsSeparator()
 		);
 	}
 	
@@ -45,18 +44,18 @@ public class DefaultSquareMatrixParser<T> extends AbstractSquareMatrixParser<T> 
 	}
 
 	@Override
-	public SquareMatrix<T> generateEmptyMatrix() {
-		return new DefaultSquareMatrix<T>(this, 0);
+	public DefaultSquareMatrix<T> generateEmptyMatrix() {
+		return new DefaultSquareMatrix<T>(0, this);
 	}
 
 	@Override
-	public SquareMatrix<T> generateMatrix(Map<Integer, ArrayList<T>> map, int columnsSize) {
+	public DefaultSquareMatrix<T> generateMatrix(Map<Integer, ArrayList<T>> map, int columnsSize) {
 		int rowCount = map.keySet().size();
 		if(rowCount != columnsSize){
 			throw new InvalidMatrixRepresentation(MessageManager.getDefaultMessage(DefaultMessagesKey.INVALID_MATRIX_REPRESENTATION));
 		}
 		
-		DefaultSquareMatrix<T> dsm = new DefaultSquareMatrix<T>(this, rowCount);
+		DefaultSquareMatrix<T> dsm = new DefaultSquareMatrix<T>(rowCount, this);
 		
 		for (Integer rowNumber : map.keySet()) {
 			ArrayList<T> rowElements = map.get(rowNumber);

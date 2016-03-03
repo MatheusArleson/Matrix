@@ -2,8 +2,9 @@ package br.com.xavier.matrix.interfaces.indexed;
 
 import java.util.Set;
 
-public interface ObjectIndexedMatrix<O, T> {
-	
+import br.com.xavier.matrix.interfaces.Matrix;
+
+public interface ObjectIndexedMatrix<O, M extends Matrix<T>, T> {
 	
 	public void clear();
 	public T get(O columnObj, O rowObj);

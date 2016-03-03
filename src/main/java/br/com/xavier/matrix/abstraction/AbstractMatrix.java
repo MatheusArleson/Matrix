@@ -2,11 +2,11 @@ package br.com.xavier.matrix.abstraction;
 
 import java.lang.reflect.Array;
 
+import br.com.xavier.matrix.abstraction.parser.AbstractMatrixParser;
 import br.com.xavier.matrix.impl.parser.DefaultMatrixParser;
 import br.com.xavier.matrix.interfaces.Matrix;
 import br.com.xavier.matrix.interfaces.parser.MatrixParser;
 import br.com.xavier.matrix.validation.MatrixValidator;
-import br.com.xavier.matrix.validation.NullValidator;
 
 public abstract class AbstractMatrix<T> implements Matrix<T> {
 	
@@ -18,12 +18,15 @@ public abstract class AbstractMatrix<T> implements Matrix<T> {
 	protected T[][] matrix;
     
     //XXX CONSTRUCTOR
-	public AbstractMatrix(MatrixParser<T> parser) {
-		this(parser, 0, 0);
+	public AbstractMatrix() {
+		this(0, 0);
 	}
 	
-	public AbstractMatrix(MatrixParser<T> parser, int columns, int rows) {
-		NullValidator.checkNullParameter(parser);
+	public AbstractMatrix(int columns, int rows) {
+		this(columns, rows, null);
+	}
+	
+	public AbstractMatrix(int columns, int rows, AbstractMatrixParser<T> parser) {
 		MatrixValidator.checkInvalidRowColumnSize(columns);
 		MatrixValidator.checkInvalidRowColumnSize(rows);
 		
@@ -127,6 +130,16 @@ public abstract class AbstractMatrix<T> implements Matrix<T> {
 		return obj.equals(representsEmpty());
 	}
 	
+	@Override
+	public MatrixParser<T> getMatrixParser() {
+		return matrixParser;
+	}
+	
+	@Override
+	public void setMatrixParser(MatrixParser<T> parser) {
+		this.matrixParser = parser;
+	}
+	
 	//XXX PROTECTED METHODS
 	@SuppressWarnings("unchecked")
 	protected T[][] fabricateMatrix(int columns, int rows){
@@ -155,7 +168,11 @@ public abstract class AbstractMatrix<T> implements Matrix<T> {
 	
 	@Override
 	public String toString() {
-		return matrixParser.toString(this);
+		if(matrixParser == null){
+			this.matrixParser = new DefaultMatrixParser<T>();
+		}
+		
+		return matrixParser.toMatrixString(this);
 	}
 	
 	//XXX GETTERS
@@ -168,4 +185,5 @@ public abstract class AbstractMatrix<T> implements Matrix<T> {
 	public int getRowCount() {
 		return rows;
 	}
+	
 }

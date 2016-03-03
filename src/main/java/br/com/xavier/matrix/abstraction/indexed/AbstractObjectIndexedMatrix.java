@@ -10,12 +10,13 @@ import java.util.Set;
 import br.com.xavier.matrix.abstraction.AbstractMatrix;
 import br.com.xavier.matrix.exception.InvalidMatrixRepresentation;
 import br.com.xavier.matrix.interfaces.indexed.ObjectIndexedMatrix;
-import br.com.xavier.matrix.interfaces.parser.indexed.ObjectIndexedMatrixParser;
 import br.com.xavier.matrix.util.messages.IndexAwareSet;
+import br.com.xavier.matrix.util.messages.MessageManager;
+import br.com.xavier.matrix.util.messages.enums.DefaultMessagesKey;
 import br.com.xavier.matrix.validation.NullValidator;
 import br.com.xavier.matrix.validation.ObjectIndexValidator;
 
-public abstract class AbstractObjectIndexedMatrix<O, M extends AbstractMatrix<T>, T> implements ObjectIndexedMatrix<O, T>{
+public abstract class AbstractObjectIndexedMatrix<O, M extends AbstractMatrix<T>, T> implements ObjectIndexedMatrix<O, M, T>{
 	
 	//XXX CLASS PROPERTIES
 	private Class<M> matrixClass;
@@ -24,16 +25,19 @@ public abstract class AbstractObjectIndexedMatrix<O, M extends AbstractMatrix<T>
 	private IndexAwareSet<O> rowsObjectsSet;
 	private IndexAwareSet<O> columnsObjectsSet;
 	
-	private ObjectIndexedMatrixParser<O, T> parser;
-	
 	//XXX CONSTRUCTOR
-	public AbstractObjectIndexedMatrix(ObjectIndexedMatrixParser<O, T> parser) throws Exception {
-		NullValidator.checkNullParameter(parser);
-		this.parser = parser;
-		
+	public AbstractObjectIndexedMatrix() throws Exception {
 		getMatrixClass();
-        getMatrixInstance();
+		getMatrixInstance();
 		clearInternalStructure();
+	}
+	
+	public AbstractObjectIndexedMatrix(LinkedHashSet<O> rowsSet, LinkedHashSet<O> columnsSet, M matrix) throws Exception {
+		validateContext(matrix, rowsSet, columnsSet);
+		
+		this.matrix = matrix;
+		this.rowsObjectsSet = new IndexAwareSet<O>(rowsSet);
+		this.columnsObjectsSet = new IndexAwareSet<O>(columnsSet);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -65,12 +69,22 @@ public abstract class AbstractObjectIndexedMatrix<O, M extends AbstractMatrix<T>
 		this.columnsObjectsSet = new IndexAwareSet<O>(new LinkedHashSet<O>());
 	}
 	
-	//XXX OVERRIDE METHODS
-	@Override
-	public String toString() {
-		return parser.toString();
+	private void validateContext(M matrix, LinkedHashSet<O> rowsSet, LinkedHashSet<O> columnsSet) {
+		NullValidator.checkNullParameter(rowsSet, columnsSet, matrix);
+		
+		int objRowCount = rowsSet.size();
+		int objColumnCount = columnsSet.size();
+		int matrixRowCount = matrix.getRowCount();
+		int matrixColumnCount = matrix.getColumnCount();
+		
+		boolean isRowCountDifferent = objRowCount != matrixRowCount;
+		boolean isColumnCountDifferent = objColumnCount != matrixColumnCount;
+		
+		if(isRowCountDifferent || isColumnCountDifferent){
+			throw new InvalidMatrixRepresentation(MessageManager.getDefaultMessage(DefaultMessagesKey.INVALID_MATRIX_REPRESENTATION));
+		}
 	}
-	
+
 	//XXX OPERATION METHODS
 	
 	@Override
@@ -240,5 +254,5 @@ public abstract class AbstractObjectIndexedMatrix<O, M extends AbstractMatrix<T>
 		columnsObjectsSet.remove(colRowObj);
 		matrix.removeColumAndRow(index);
 	}
-
+	
 }

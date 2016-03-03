@@ -31,7 +31,7 @@ public abstract class AbstractMatrixParser<T> extends AbstractParser implements 
 	}
 
 	@Override
-	public String toString(Matrix<T> matrix) {
+	public String toMatrixString(Matrix<T> matrix) {
 		if(matrix == null){
 			throw new NullPointerException(MessageManager.getDefaultMessage(DefaultMessagesKey.INVALID_MATRIX_REPRESENTATION));
 		}
@@ -43,8 +43,8 @@ public abstract class AbstractMatrixParser<T> extends AbstractParser implements 
 		int rows = matrix.getRowCount();
 		
 		StringBuilder sb = new StringBuilder();
-		sb.append(getRepresentationStartDelimiter());
-		sb.append(getMatrixRepresentatitionStartDelimiter());
+		sb.append(getMatrixRepresentationStartDelimiter());
+		sb.append(getMatrixRepresentatitionMatrixStartDelimiter());
 		
 		for (int rowCount = 0; rowCount < rows; rowCount++) {
 			StringBuffer rowBuffer = new StringBuffer();
@@ -54,34 +54,34 @@ public abstract class AbstractMatrixParser<T> extends AbstractParser implements 
 				T matrixElement = matrix.get(columnCount, rowCount);
 				boolean isEmpty = matrix.checkEmpty(matrixElement);
 				rowBuffer.append(isEmpty ? emptyRepresentation : matrixElement.toString());
-				rowBuffer.append(getMatrixRepresentationRowElementsSeparator());
+				rowBuffer.append(getMatrixRepresentationMatrixRowElementsSeparator());
 			}
 			
 			String lineStr = rowBuffer.toString();
-			if(lineStr.endsWith(getMatrixRepresentationRowElementsSeparator())){
-				lineStr = lineStr.substring(0, lineStr.length() - getMatrixRepresentationRowElementsSeparator().length());
+			if(lineStr.endsWith(getMatrixRepresentationMatrixRowElementsSeparator())){
+				lineStr = lineStr.substring(0, lineStr.length() - getMatrixRepresentationMatrixRowElementsSeparator().length());
 			}
 			
 			sb.append(lineStr);
-			sb.append(getMatrixRepresentationRowSeparator());
+			sb.append(getMatrixRepresentationMatrixRowSeparator());
 		}
 		
-		sb.append(getMatrixRepresentatitionEndDelimiter());
-		sb.append(getRepresentationEndDelimiter());
+		sb.append(getMatrixRepresentatitionMatrixEndDelimiter());
+		sb.append(getMatrixRepresentationEndDelimiter());
 		return sb.toString();
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public Matrix<T> fromString(String matrixString) throws InvalidMatrixRepresentation {
+	public Matrix<T> fromMatrixString(String matrixString) throws InvalidMatrixRepresentation {
 		
-		matrixString = validate(matrixString);
+		matrixString = validateMatrixRepresentation(matrixString);
 		
 		if(matrixString.isEmpty()){
 			return generateEmptyMatrix();
 		}
 		
-		String[] lines = matrixString.split(getMatrixRepresentationRowSeparator());
+		String[] lines = matrixString.split(getMatrixRepresentationMatrixRowSeparator());
 		int rows = lines.length;
 		int columns = 0;
 		
@@ -89,7 +89,7 @@ public abstract class AbstractMatrixParser<T> extends AbstractParser implements 
 		for (int lineNumber = 0; lineNumber < rows; lineNumber++) {
 			
 			String line = lines[lineNumber];
-			String[] elements = line.split(getMatrixRepresentationRowElementsSeparator());
+			String[] elements = line.split(getMatrixRepresentationMatrixRowElementsSeparator());
 			if(elements.length > columns){
 				columns = elements.length;
 			}

@@ -7,6 +7,7 @@ import br.com.xavier.matrix.exception.InvalidMatrixRepresentation;
 import br.com.xavier.matrix.exception.InvalidMatrixRepresentationDelimiter;
 import br.com.xavier.matrix.util.messages.MessageManager;
 import br.com.xavier.matrix.util.messages.enums.DefaultMessagesKey;
+import br.com.xavier.matrix.validation.MatrixValidator;
 import br.com.xavier.matrix.validation.StringValidator;
 
 public abstract class AbstractParser  {
@@ -16,59 +17,59 @@ public abstract class AbstractParser  {
 	
 	//XXX CLASS ELEMENTS
 	
-	private final String representationStartDelimiter; 
-	private final String representationEndDelimiter;
-	private final String matrixRepresentatitionStartDelimiter;
-	private final String matrixRepresentatitionEndDelimiter;
-	private final String matrixRepresentationRowSeparator;
-	private final String matrixRepresentationRowElementsSeparator;
+	private final String matrixRepresentationStartDelimiter; 
+	private final String matrixRepresentationEndDelimiter;
+	private final String matrixRepresentatitionMatrixStartDelimiter;
+	private final String matrixRepresentatitionMatrixEndDelimiter;
+	private final String matrixRepresentationMatrixRowSeparator;
+	private final String matrixRepresentationMatrixRowElementsSeparator;
 	
 	private Pattern matrixRepresentationPattern;
 	private String matrixRowSeparatorRegexPatternString;
 	
 	//XXX CONSTRUCTOR
 	protected AbstractParser(
-		String representationStartDelimiter, 
-		String representationEndDelimiter, 
-		String matrixRepresentatitionStartDelimiter,
-		String matrixRepresentatitionEndDelimiter,
-		String matrixRepresentationRowSeparator,
-		String matrixRepresentationRowElementsSeparator
+		String matrixRepresentationStartDelimiter, 
+		String matrixRepresentationEndDelimiter, 
+		String matrixRepresentatitionMatrixStartDelimiter,
+		String matrixRepresentatitionMatrixEndDelimiter,
+		String matrixRepresentationMatrixRowSeparator,
+		String matrixRepresentationMatrixRowElementsSeparator
 	) {
 		super();
 		
 		boolean isInvalid = StringValidator.anyNullOrEmpty(
-			representationStartDelimiter, 
-			representationEndDelimiter, 
-			matrixRepresentatitionStartDelimiter,
-			matrixRepresentatitionEndDelimiter,
-			matrixRepresentationRowSeparator,
-			matrixRepresentationRowElementsSeparator
+			matrixRepresentationStartDelimiter, 
+			matrixRepresentationEndDelimiter, 
+			matrixRepresentatitionMatrixStartDelimiter,
+			matrixRepresentatitionMatrixEndDelimiter,
+			matrixRepresentationMatrixRowSeparator,
+			matrixRepresentationMatrixRowElementsSeparator
 		);
 		
 		if(isInvalid){
 			throw new InvalidMatrixRepresentationDelimiter();
 		}
 		
-		this.representationStartDelimiter = representationStartDelimiter;
-		this.representationEndDelimiter = representationEndDelimiter;
-		this.matrixRepresentatitionStartDelimiter = matrixRepresentatitionStartDelimiter;
-		this.matrixRepresentatitionEndDelimiter = matrixRepresentatitionEndDelimiter;
-		this.matrixRepresentationRowSeparator = matrixRepresentationRowSeparator;
-		this.matrixRepresentationRowElementsSeparator = matrixRepresentationRowElementsSeparator;
+		this.matrixRepresentationStartDelimiter = matrixRepresentationStartDelimiter;
+		this.matrixRepresentationEndDelimiter = matrixRepresentationEndDelimiter;
+		this.matrixRepresentatitionMatrixStartDelimiter = matrixRepresentatitionMatrixStartDelimiter;
+		this.matrixRepresentatitionMatrixEndDelimiter = matrixRepresentatitionMatrixEndDelimiter;
+		this.matrixRepresentationMatrixRowSeparator = matrixRepresentationMatrixRowSeparator;
+		this.matrixRepresentationMatrixRowElementsSeparator = matrixRepresentationMatrixRowElementsSeparator;
 		
-		this.matrixRowSeparatorRegexPatternString = Pattern.compile(matrixRepresentationRowSeparator).toString();
+		this.matrixRowSeparatorRegexPatternString = Pattern.compile(matrixRepresentationMatrixRowSeparator).toString();
 		getMatrixRepresentationPattern();
 	}
 	
 	private void getMatrixRepresentationPattern(){
-		String regexp = MATRIX_ELEMENTS_SEPARATOR_BASE_REGEXP.replace("#", this.matrixRepresentationRowElementsSeparator);
+		String regexp = MATRIX_ELEMENTS_SEPARATOR_BASE_REGEXP.replace("#", this.matrixRepresentationMatrixRowElementsSeparator);
 		this.matrixRepresentationPattern = Pattern.compile(regexp);
 	}
 	
 	//XXX METHODS
 	
-	public String validate(String representationString) {
+	public String validateMatrixRepresentation(String representationString) {
 		if(StringValidator.isNullOrEmpty(representationString)){
 			throw new InvalidMatrixRepresentation(MessageManager.getDefaultMessage(DefaultMessagesKey.INVALID_MATRIX_REPRESENTATION));
 		}
@@ -85,81 +86,58 @@ public abstract class AbstractParser  {
 	}
 
 	//XXX REPRESENTATION METHODS
-	private void checkContainsDelimiters(String representationString) {
-		if(!representationString.contains(representationStartDelimiter)){
-			throw new InvalidMatrixRepresentation(MessageManager.getDefaultMessage(DefaultMessagesKey.INVALID_MATRIX_REPRESENTATION));
-		}
-		
-		if(!representationString.contains(representationEndDelimiter)){
-			throw new InvalidMatrixRepresentation(MessageManager.getDefaultMessage(DefaultMessagesKey.INVALID_MATRIX_REPRESENTATION));
-		}
-		
-		if(!representationString.contains(matrixRepresentatitionStartDelimiter)){
-			throw new InvalidMatrixRepresentation(MessageManager.getDefaultMessage(DefaultMessagesKey.INVALID_MATRIX_REPRESENTATION));
-		}
-		
-		if(!representationString.contains(matrixRepresentatitionEndDelimiter)){
-			throw new InvalidMatrixRepresentation(MessageManager.getDefaultMessage(DefaultMessagesKey.INVALID_MATRIX_REPRESENTATION));
-		}
+	public void checkContainsDelimiters(String representationString) {
+		MatrixValidator.checkContains(representationString, matrixRepresentationStartDelimiter);
+		MatrixValidator.checkContains(representationString, matrixRepresentationEndDelimiter);
+		MatrixValidator.checkContains(representationString, matrixRepresentatitionMatrixStartDelimiter);
+		MatrixValidator.checkContains(representationString, matrixRepresentatitionMatrixEndDelimiter);
 	}
 	
-	private void checkIndexOfDelimiters(String representationString) {
+	public void checkIndexOfDelimiters(String representationString) {
 		
-		int indexOfRepStartDel = representationString.indexOf(representationStartDelimiter);
-		int indexOfRepEndDel = representationString.indexOf(representationEndDelimiter);
-		int indexOfRepMatrixStartDel = representationString.indexOf(matrixRepresentatitionStartDelimiter);
-		int indexOfRepMatrixEndDel = representationString.indexOf(matrixRepresentatitionEndDelimiter);
+		int indexOfRepStartDel = representationString.indexOf(matrixRepresentationStartDelimiter);
+		int indexOfRepEndDel = representationString.indexOf(matrixRepresentationEndDelimiter);
+		int indexOfRepMatrixStartDel = representationString.indexOf(matrixRepresentatitionMatrixStartDelimiter);
+		int indexOfRepMatrixEndDel = representationString.indexOf(matrixRepresentatitionMatrixEndDelimiter);
 		
 		//end of representation is before start of representation
-		boolean indexError = indexOfRepEndDel < indexOfRepStartDel;
-		if(indexError){
-			throw new InvalidMatrixRepresentation(MessageManager.getDefaultMessage(DefaultMessagesKey.INVALID_MATRIX_REPRESENTATION));
-		}
+		MatrixValidator.checkDelimiterIsBefore(indexOfRepEndDel, indexOfRepStartDel);
 		
 		//end of matrix representation is before start of matrix representation
-		indexError = indexOfRepMatrixEndDel < indexOfRepMatrixStartDel;
-		if(indexError){
-			throw new InvalidMatrixRepresentation(MessageManager.getDefaultMessage(DefaultMessagesKey.INVALID_MATRIX_REPRESENTATION));
-		}
+		MatrixValidator.checkDelimiterIsBefore(indexOfRepMatrixEndDel, indexOfRepMatrixStartDel);
 		
 		//start of matrix representation is before start of representation
-		indexError = indexOfRepMatrixStartDel < indexOfRepStartDel;
-		if(indexError){
-			throw new InvalidMatrixRepresentation(MessageManager.getDefaultMessage(DefaultMessagesKey.INVALID_MATRIX_REPRESENTATION));
-		}
+		MatrixValidator.checkDelimiterIsBefore(indexOfRepMatrixStartDel, indexOfRepStartDel);
 		
 		//end of matrix representation is before end of representation
-		indexError = indexOfRepEndDel < indexOfRepMatrixEndDel;
-		if(indexError){
-			throw new InvalidMatrixRepresentation(MessageManager.getDefaultMessage(DefaultMessagesKey.INVALID_MATRIX_REPRESENTATION));
-		}
+		MatrixValidator.checkDelimiterIsBefore(indexOfRepEndDel, indexOfRepMatrixEndDel);
 	}
 	
 	//XXX MATRIIX CONTENT METHODS
 	
-	private String getMatrixContent(String representationString){
+	public String getMatrixContent(String representationString){
 		//removes the start and end delimiters
-		int indexOfRepStartDel = representationString.indexOf(representationStartDelimiter) + representationStartDelimiter.length();
-		int indexOfRepEndDel = representationString.indexOf(representationEndDelimiter);
+		int indexOfRepStartDel = representationString.indexOf(matrixRepresentationStartDelimiter) + matrixRepresentationStartDelimiter.length();
+		int indexOfRepEndDel = representationString.indexOf(matrixRepresentationEndDelimiter);
 		
 		String strippedStr = representationString.substring(indexOfRepStartDel, indexOfRepEndDel);
 		
-		int indexOfMatrixStartDel = strippedStr.indexOf(matrixRepresentatitionStartDelimiter) + matrixRepresentatitionStartDelimiter.length();
-		int indexOfMatrixEndDel = strippedStr.indexOf(matrixRepresentatitionEndDelimiter);
+		int indexOfMatrixStartDel = strippedStr.indexOf(matrixRepresentatitionMatrixStartDelimiter) + matrixRepresentatitionMatrixStartDelimiter.length();
+		int indexOfMatrixEndDel = strippedStr.indexOf(matrixRepresentatitionMatrixEndDelimiter);
 		
 		strippedStr = strippedStr.substring(indexOfMatrixStartDel, indexOfMatrixEndDel);
 		
 		return strippedStr;
 	}
 	
-	private void checkMatrixContent(String matrixRepresentation){
+	public void checkMatrixContent(String matrixRepresentation){
 		if(matrixRepresentation.isEmpty()){
 			return;
 		}
 		
 		String toCompareStr = new String(matrixRepresentation);
 		
-		boolean containsRowSeparator = matrixRepresentation.contains(matrixRepresentationRowSeparator);
+		boolean containsRowSeparator = matrixRepresentation.contains(matrixRepresentationMatrixRowSeparator);
 		if(containsRowSeparator){ 
 			toCompareStr = toCompareStr.replaceAll(matrixRowSeparatorRegexPatternString, "");
 		}
@@ -181,27 +159,27 @@ public abstract class AbstractParser  {
 		return LINE_SEPARATOR;
 	}
 	
-	public String getRepresentationStartDelimiter() {
-		return representationStartDelimiter;
+	public String getMatrixRepresentationStartDelimiter() {
+		return matrixRepresentationStartDelimiter;
 	}
 	
-	public String getRepresentationEndDelimiter() {
-		return representationEndDelimiter;
+	public String getMatrixRepresentationEndDelimiter() {
+		return matrixRepresentationEndDelimiter;
 	}
 	
-	public String getMatrixRepresentatitionStartDelimiter() {
-		return matrixRepresentatitionStartDelimiter;
+	public String getMatrixRepresentatitionMatrixStartDelimiter() {
+		return matrixRepresentatitionMatrixStartDelimiter;
 	}
 	
-	public String getMatrixRepresentatitionEndDelimiter() {
-		return matrixRepresentatitionEndDelimiter;
+	public String getMatrixRepresentatitionMatrixEndDelimiter() {
+		return matrixRepresentatitionMatrixEndDelimiter;
 	}
 	
-	public String getMatrixRepresentationRowSeparator() {
-		return matrixRepresentationRowSeparator;
+	public String getMatrixRepresentationMatrixRowSeparator() {
+		return matrixRepresentationMatrixRowSeparator;
 	}
 	
-	public String getMatrixRepresentationRowElementsSeparator() {
-		return matrixRepresentationRowElementsSeparator;
+	public String getMatrixRepresentationMatrixRowElementsSeparator() {
+		return matrixRepresentationMatrixRowElementsSeparator;
 	}
 }

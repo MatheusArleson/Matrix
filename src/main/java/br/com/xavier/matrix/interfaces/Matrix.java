@@ -1,5 +1,7 @@
 package br.com.xavier.matrix.interfaces;
 
+import br.com.xavier.matrix.interfaces.parser.MatrixParser;
+
 public abstract interface Matrix<T> {
 	
 	public void clear();
@@ -15,5 +17,8 @@ public abstract interface Matrix<T> {
 	public T representsEmpty();
 	public int getColumnCount();
 	public int getRowCount();
+	
+	public MatrixParser<T> getMatrixParser();
+	public void setMatrixParser(MatrixParser<T> parser);
 	
 }

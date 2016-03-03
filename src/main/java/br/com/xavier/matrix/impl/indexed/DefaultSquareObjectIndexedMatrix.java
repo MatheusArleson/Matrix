@@ -1,14 +1,23 @@
 package br.com.xavier.matrix.impl.indexed;
 
-import br.com.xavier.matrix.abstraction.SquareMatrix;
-import br.com.xavier.matrix.abstraction.indexed.SquareObjectIndexedMatrix;
+import java.util.LinkedHashSet;
 
-public class DefaultSquareObjectIndexedMatrix<O,T> extends SquareObjectIndexedMatrix<O, SquareMatrix<T>, T>{
+import br.com.xavier.matrix.abstraction.indexed.AbstractSquareObjectIndexedMatrix;
+import br.com.xavier.matrix.impl.DefaultSquareMatrix;
+
+public class DefaultSquareObjectIndexedMatrix<O,T> extends AbstractSquareObjectIndexedMatrix<O, DefaultSquareMatrix<T>, T>{
 
 	public DefaultSquareObjectIndexedMatrix() throws Exception {
 		super();
 	}
-
+	
+	public DefaultSquareObjectIndexedMatrix(
+		LinkedHashSet<O> rowsObjsSet, 
+		LinkedHashSet<O> columnsObjsSet, 
+		DefaultSquareMatrix<T> matrix
+	) throws Exception {
+		super(rowsObjsSet, columnsObjsSet, matrix);
+	}
 
 	@Override
 	public T representsEmpty() {
