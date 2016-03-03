@@ -7,6 +7,7 @@ import br.com.xavier.matrix.interfaces.Matrix;
 public interface ObjectIndexedMatrix<O, M extends Matrix<T>, T> {
 	
 	public void clear();
+	public void clearMatrixData();
 	public T get(O columnObj, O rowObj);
 	public T set(O columnObj, O rowObj, T value);
 	public boolean checkEmpty(T obj);

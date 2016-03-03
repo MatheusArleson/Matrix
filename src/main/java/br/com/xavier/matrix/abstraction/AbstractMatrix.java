@@ -65,10 +65,11 @@ public abstract class AbstractMatrix<T> implements Matrix<T> {
 	
 	@Override
 	public void addColumAndRow() {
+		T[][] newMatrix = fabricateMatrix(columns+1, rows+1);
+		copyContent(newMatrix, -1, -1);
+		
 		this.columns = this.columns + 1;
 		this.rows = this.rows + 1;
-		T[][] newMatrix = fabricateMatrix(columns, rows);
-		copyContent(newMatrix, -1, -1);
 		this.matrix = newMatrix;
 	}
 	
@@ -96,10 +97,12 @@ public abstract class AbstractMatrix<T> implements Matrix<T> {
 	public void removeColumAndRow(int colRowNumber) {
 		MatrixValidator.checkInvalidColumnRowIndex(this, colRowNumber);
 		
+		T[][] newMatrix = fabricateMatrix(columns-1, rows-1);
+		copyContent(newMatrix, colRowNumber, colRowNumber);
+		
 		this.columns = this.columns - 1;
 		this.rows = this.rows - 1;
-		T[][] newMatrix = fabricateMatrix(columns, rows);
-		copyContent(newMatrix, colRowNumber, colRowNumber);
+		
 		this.matrix = newMatrix;
 	}
 	
@@ -143,26 +146,28 @@ public abstract class AbstractMatrix<T> implements Matrix<T> {
 	//XXX PROTECTED METHODS
 	@SuppressWarnings("unchecked")
 	protected T[][] fabricateMatrix(int columns, int rows){
-		
-		
-		
 		return (T[][]) Array.newInstance(Object.class, columns, rows);
 	}
 	
 	//XXX PRIVATE METHODS
 	private void copyContent(T[][] newMatrix, int removedColumn, int removedRow) {
-		for (int column = 0; column < matrix.length; column++) {
-			if(column == removedColumn){
+		int p = 0;
+		for (int i = 0; i < rows; ++i) {
+			if (i == removedRow) {
 				continue;
 			}
-			
-			for (int row = 0; row < matrix[column].length; row++) {
-				if(row == removedRow){
+
+			int q = 0;
+			for (int j = 0; j < columns; ++j) {
+				if (j == removedColumn) {
 					continue;
 				}
-				
-				newMatrix[column][row] = matrix[column][row];
+
+				newMatrix[p][q] = matrix[i][j];
+				++q;
 			}
+
+			++p;
 		}
 	}
 	

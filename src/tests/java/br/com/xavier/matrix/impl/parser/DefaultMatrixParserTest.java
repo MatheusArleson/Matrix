@@ -9,12 +9,13 @@ import org.junit.Test;
 import br.com.xavier.matrix.exception.InvalidMatrixRepresentation;
 import br.com.xavier.matrix.impl.BitSquareMatrix;
 import br.com.xavier.matrix.impl.indexed.DefaultObjectIndexedMatrix;
+import br.com.xavier.matrix.impl.indexed.DefaultSquareObjectIndexedMatrix;
 import br.com.xavier.matrix.interfaces.Matrix;
 
 
 public class DefaultMatrixParserTest {
 	
-	@Test
+	@Test @Ignore
 	public void aTest() throws Exception{
 		DefaultObjectIndexedMatrix<Integer, Integer> doim = new DefaultObjectIndexedMatrix<>();
 		doim.addRow(1);
@@ -26,6 +27,18 @@ public class DefaultMatrixParserTest {
 		
 		Assert.assertTrue(isEqual);
 		
+	}
+	
+	@Test
+	public void bTest() throws Exception{
+		DefaultSquareObjectIndexedMatrix<Integer, Integer> doim = new DefaultSquareObjectIndexedMatrix<>();
+		doim.addColumAndRow(1);
+		doim.addColumAndRow(2);
+		
+		doim.set(1, 2, 10);
+		doim.set(2, 1, 50);
+		
+		doim.removeColumAndRow(1);
 	}
 	
 	@Test @Ignore

@@ -60,7 +60,7 @@ public abstract class AbstractObjectIndexedMatrix<O, M extends AbstractMatrix<T>
 	}
 	
 	private void getMatrixInstance() throws ClassNotFoundException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
-		this.matrix = (M) matrixClass.getConstructor(int.class, int.class).newInstance(0,0);
+		this.matrix = (M) matrixClass.newInstance();
 	}
 
 	private void clearInternalStructure() {
@@ -90,6 +90,11 @@ public abstract class AbstractObjectIndexedMatrix<O, M extends AbstractMatrix<T>
 	@Override
 	public void clear() {
 		clearInternalStructure();
+	}
+	
+	@Override
+	public void clearMatrixData() {
+		matrix.clear();
 	}
 	
 	@Override
