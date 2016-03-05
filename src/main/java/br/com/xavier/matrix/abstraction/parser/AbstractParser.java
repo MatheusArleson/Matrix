@@ -17,12 +17,12 @@ public abstract class AbstractParser  {
 	
 	//XXX CLASS ELEMENTS
 	
-	private final String matrixRepresentationStartDelimiter; 
-	private final String matrixRepresentationEndDelimiter;
-	private final String matrixRepresentatitionMatrixStartDelimiter;
-	private final String matrixRepresentatitionMatrixEndDelimiter;
-	private final String matrixRepresentationMatrixRowSeparator;
-	private final String matrixRepresentationMatrixRowElementsSeparator;
+	private String matrixRepresentationStartDelimiter; 
+	private String matrixRepresentationEndDelimiter;
+	private String matrixRepresentatitionMatrixStartDelimiter;
+	private String matrixRepresentatitionMatrixEndDelimiter;
+	private String matrixRepresentationMatrixRowSeparator;
+	private String matrixRepresentationMatrixRowElementsSeparator;
 	
 	private Pattern matrixRepresentationPattern;
 	private String matrixRowSeparatorRegexPatternString;
@@ -158,28 +158,52 @@ public abstract class AbstractParser  {
 	public static String getLineseparator() {
 		return LINE_SEPARATOR;
 	}
-	
+
 	public String getMatrixRepresentationStartDelimiter() {
 		return matrixRepresentationStartDelimiter;
 	}
-	
+
+	public void setMatrixRepresentationStartDelimiter(String matrixRepresentationStartDelimiter) {
+		this.matrixRepresentationStartDelimiter = matrixRepresentationStartDelimiter;
+	}
+
 	public String getMatrixRepresentationEndDelimiter() {
 		return matrixRepresentationEndDelimiter;
 	}
-	
+
+	public void setMatrixRepresentationEndDelimiter(String matrixRepresentationEndDelimiter) {
+		this.matrixRepresentationEndDelimiter = matrixRepresentationEndDelimiter;
+	}
+
 	public String getMatrixRepresentatitionMatrixStartDelimiter() {
 		return matrixRepresentatitionMatrixStartDelimiter;
 	}
-	
+
+	public void setMatrixRepresentatitionMatrixStartDelimiter(String matrixRepresentatitionMatrixStartDelimiter) {
+		this.matrixRepresentatitionMatrixStartDelimiter = matrixRepresentatitionMatrixStartDelimiter;
+	}
+
 	public String getMatrixRepresentatitionMatrixEndDelimiter() {
 		return matrixRepresentatitionMatrixEndDelimiter;
 	}
-	
+
+	public void setMatrixRepresentatitionMatrixEndDelimiter(String matrixRepresentatitionMatrixEndDelimiter) {
+		this.matrixRepresentatitionMatrixEndDelimiter = matrixRepresentatitionMatrixEndDelimiter;
+	}
+
 	public String getMatrixRepresentationMatrixRowSeparator() {
 		return matrixRepresentationMatrixRowSeparator;
 	}
-	
+
+	public void setMatrixRepresentationMatrixRowSeparator(String matrixRepresentationMatrixRowSeparator) {
+		this.matrixRepresentationMatrixRowSeparator = matrixRepresentationMatrixRowSeparator;
+	}
+
 	public String getMatrixRepresentationMatrixRowElementsSeparator() {
 		return matrixRepresentationMatrixRowElementsSeparator;
+	}
+
+	public void setMatrixRepresentationMatrixRowElementsSeparator(String matrixRepresentationMatrixRowElementsSeparator) {
+		this.matrixRepresentationMatrixRowElementsSeparator = matrixRepresentationMatrixRowElementsSeparator;
 	}
 }
