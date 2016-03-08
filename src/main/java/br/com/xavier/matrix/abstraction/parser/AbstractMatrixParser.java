@@ -44,7 +44,7 @@ public abstract class AbstractMatrixParser<T> extends AbstractParser implements 
 		
 		StringBuilder sb = new StringBuilder();
 		sb.append(getMatrixRepresentationStartDelimiter());
-		sb.append(getMatrixRepresentatitionMatrixStartDelimiter());
+		sb.append(getMatrixRepresentationMatrixStartDelimiter());
 		
 		for (int rowCount = 0; rowCount < rows; rowCount++) {
 			StringBuffer rowBuffer = new StringBuffer();
@@ -66,7 +66,7 @@ public abstract class AbstractMatrixParser<T> extends AbstractParser implements 
 			sb.append(getMatrixRepresentationMatrixRowSeparator());
 		}
 		
-		sb.append(getMatrixRepresentatitionMatrixEndDelimiter());
+		sb.append(getMatrixRepresentationMatrixEndDelimiter());
 		sb.append(getMatrixRepresentationEndDelimiter());
 		return sb.toString();
 	}

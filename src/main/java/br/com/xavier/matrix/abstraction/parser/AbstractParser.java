@@ -19,8 +19,8 @@ public abstract class AbstractParser  {
 	
 	private String matrixRepresentationStartDelimiter; 
 	private String matrixRepresentationEndDelimiter;
-	private String matrixRepresentatitionMatrixStartDelimiter;
-	private String matrixRepresentatitionMatrixEndDelimiter;
+	private String matrixRepresentationMatrixStartDelimiter;
+	private String matrixRepresentationMatrixEndDelimiter;
 	private String matrixRepresentationMatrixRowSeparator;
 	private String matrixRepresentationMatrixRowElementsSeparator;
 	
@@ -31,8 +31,8 @@ public abstract class AbstractParser  {
 	protected AbstractParser(
 		String matrixRepresentationStartDelimiter, 
 		String matrixRepresentationEndDelimiter, 
-		String matrixRepresentatitionMatrixStartDelimiter,
-		String matrixRepresentatitionMatrixEndDelimiter,
+		String matrixRepresentationMatrixStartDelimiter,
+		String matrixRepresentationMatrixEndDelimiter,
 		String matrixRepresentationMatrixRowSeparator,
 		String matrixRepresentationMatrixRowElementsSeparator
 	) {
@@ -41,8 +41,8 @@ public abstract class AbstractParser  {
 		boolean isInvalid = StringValidator.anyNullOrEmpty(
 			matrixRepresentationStartDelimiter, 
 			matrixRepresentationEndDelimiter, 
-			matrixRepresentatitionMatrixStartDelimiter,
-			matrixRepresentatitionMatrixEndDelimiter,
+			matrixRepresentationMatrixStartDelimiter,
+			matrixRepresentationMatrixEndDelimiter,
 			matrixRepresentationMatrixRowSeparator,
 			matrixRepresentationMatrixRowElementsSeparator
 		);
@@ -53,8 +53,8 @@ public abstract class AbstractParser  {
 		
 		this.matrixRepresentationStartDelimiter = matrixRepresentationStartDelimiter;
 		this.matrixRepresentationEndDelimiter = matrixRepresentationEndDelimiter;
-		this.matrixRepresentatitionMatrixStartDelimiter = matrixRepresentatitionMatrixStartDelimiter;
-		this.matrixRepresentatitionMatrixEndDelimiter = matrixRepresentatitionMatrixEndDelimiter;
+		this.matrixRepresentationMatrixStartDelimiter = matrixRepresentationMatrixStartDelimiter;
+		this.matrixRepresentationMatrixEndDelimiter = matrixRepresentationMatrixEndDelimiter;
 		this.matrixRepresentationMatrixRowSeparator = matrixRepresentationMatrixRowSeparator;
 		this.matrixRepresentationMatrixRowElementsSeparator = matrixRepresentationMatrixRowElementsSeparator;
 		
@@ -89,16 +89,16 @@ public abstract class AbstractParser  {
 	public void checkContainsDelimiters(String representationString) {
 		MatrixValidator.checkContains(representationString, matrixRepresentationStartDelimiter);
 		MatrixValidator.checkContains(representationString, matrixRepresentationEndDelimiter);
-		MatrixValidator.checkContains(representationString, matrixRepresentatitionMatrixStartDelimiter);
-		MatrixValidator.checkContains(representationString, matrixRepresentatitionMatrixEndDelimiter);
+		MatrixValidator.checkContains(representationString, matrixRepresentationMatrixStartDelimiter);
+		MatrixValidator.checkContains(representationString, matrixRepresentationMatrixEndDelimiter);
 	}
 	
 	public void checkIndexOfDelimiters(String representationString) {
 		
 		int indexOfRepStartDel = representationString.indexOf(matrixRepresentationStartDelimiter);
 		int indexOfRepEndDel = representationString.indexOf(matrixRepresentationEndDelimiter);
-		int indexOfRepMatrixStartDel = representationString.indexOf(matrixRepresentatitionMatrixStartDelimiter);
-		int indexOfRepMatrixEndDel = representationString.indexOf(matrixRepresentatitionMatrixEndDelimiter);
+		int indexOfRepMatrixStartDel = representationString.indexOf(matrixRepresentationMatrixStartDelimiter);
+		int indexOfRepMatrixEndDel = representationString.indexOf(matrixRepresentationMatrixEndDelimiter);
 		
 		//end of representation is before start of representation
 		MatrixValidator.checkDelimiterIsBefore(indexOfRepEndDel, indexOfRepStartDel);
@@ -122,8 +122,8 @@ public abstract class AbstractParser  {
 		
 		String strippedStr = representationString.substring(indexOfRepStartDel, indexOfRepEndDel);
 		
-		int indexOfMatrixStartDel = strippedStr.indexOf(matrixRepresentatitionMatrixStartDelimiter) + matrixRepresentatitionMatrixStartDelimiter.length();
-		int indexOfMatrixEndDel = strippedStr.indexOf(matrixRepresentatitionMatrixEndDelimiter);
+		int indexOfMatrixStartDel = strippedStr.indexOf(matrixRepresentationMatrixStartDelimiter) + matrixRepresentationMatrixStartDelimiter.length();
+		int indexOfMatrixEndDel = strippedStr.indexOf(matrixRepresentationMatrixEndDelimiter);
 		
 		strippedStr = strippedStr.substring(indexOfMatrixStartDel, indexOfMatrixEndDel);
 		
@@ -175,20 +175,20 @@ public abstract class AbstractParser  {
 		this.matrixRepresentationEndDelimiter = matrixRepresentationEndDelimiter;
 	}
 
-	public String getMatrixRepresentatitionMatrixStartDelimiter() {
-		return matrixRepresentatitionMatrixStartDelimiter;
+	public String getMatrixRepresentationMatrixStartDelimiter() {
+		return matrixRepresentationMatrixStartDelimiter;
 	}
 
-	public void setMatrixRepresentatitionMatrixStartDelimiter(String matrixRepresentatitionMatrixStartDelimiter) {
-		this.matrixRepresentatitionMatrixStartDelimiter = matrixRepresentatitionMatrixStartDelimiter;
+	public void setMatrixRepresentationMatrixStartDelimiter(String matrixRepresentationMatrixStartDelimiter) {
+		this.matrixRepresentationMatrixStartDelimiter = matrixRepresentationMatrixStartDelimiter;
 	}
 
-	public String getMatrixRepresentatitionMatrixEndDelimiter() {
-		return matrixRepresentatitionMatrixEndDelimiter;
+	public String getMatrixRepresentationMatrixEndDelimiter() {
+		return matrixRepresentationMatrixEndDelimiter;
 	}
 
-	public void setMatrixRepresentatitionMatrixEndDelimiter(String matrixRepresentatitionMatrixEndDelimiter) {
-		this.matrixRepresentatitionMatrixEndDelimiter = matrixRepresentatitionMatrixEndDelimiter;
+	public void setMatrixRepresentationMatrixEndDelimiter(String matrixRepresentationMatrixEndDelimiter) {
+		this.matrixRepresentationMatrixEndDelimiter = matrixRepresentationMatrixEndDelimiter;
 	}
 
 	public String getMatrixRepresentationMatrixRowSeparator() {

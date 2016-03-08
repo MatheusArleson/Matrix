@@ -18,8 +18,8 @@ public class DefaultSquareMatrixParser<T> extends AbstractSquareMatrixParser<T> 
 		super(
 			DEFAULT_PARSER_VALUES.getMatrixRepresentationStartDelimiter(), 
 			DEFAULT_PARSER_VALUES.getMatrixRepresentationEndDelimiter(), 
-			DEFAULT_PARSER_VALUES.getMatrixRepresentatitionMatrixStartDelimiter(), 
-			DEFAULT_PARSER_VALUES.getMatrixRepresentatitionMatrixEndDelimiter(), 
+			DEFAULT_PARSER_VALUES.getMatrixRepresentationMatrixStartDelimiter(), 
+			DEFAULT_PARSER_VALUES.getMatrixRepresentationMatrixEndDelimiter(), 
 			DEFAULT_PARSER_VALUES.getMatrixRepresentationMatrixRowSeparator(), 
 			DEFAULT_PARSER_VALUES.getMatrixRepresentationMatrixRowElementsSeparator()
 		);
