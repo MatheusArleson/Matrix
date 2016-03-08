@@ -29,7 +29,7 @@ public class DefaultMatrixParserTest {
 		
 	}
 	
-	@Test
+	@Test @Ignore
 	public void bTest() throws Exception{
 		DefaultSquareObjectIndexedMatrix<Integer, Integer> doim = new DefaultSquareObjectIndexedMatrix<>();
 		doim.addColumAndRow(1);

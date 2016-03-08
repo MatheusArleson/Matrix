@@ -89,6 +89,10 @@ public abstract class AbstractMatrixParser<T> extends AbstractParser implements 
 		for (int lineNumber = 0; lineNumber < rows; lineNumber++) {
 			
 			String line = lines[lineNumber];
+			if(line.endsWith(getMatrixRepresentationMatrixRowElementsSeparator())){
+				line = line.substring(0, line.length() - 1);
+			}
+			
 			String[] elements = line.split(getMatrixRepresentationMatrixRowElementsSeparator());
 			if(elements.length > columns){
 				columns = elements.length;

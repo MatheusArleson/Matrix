@@ -25,14 +25,14 @@ public final class BitSquareMatrix extends DefaultSquareMatrix<Integer> {
 	}
 	
 	public Integer set(int column, int row) {
-		Integer oldValue = this.matrix[column][row];
-		this.matrix[column][row] = 1;
+		Integer oldValue = get(column, row);
+		super.set(column, row, 1);
 		return oldValue;
 	}
 	
 	public Integer unset(int column, int row) {
-		Integer oldValue = this.matrix[column][row];
-		this.matrix[column][row] = 0;
+		Integer oldValue = get(column, row);
+		super.set(column, row, 0);
 		return oldValue;
 	}
 
