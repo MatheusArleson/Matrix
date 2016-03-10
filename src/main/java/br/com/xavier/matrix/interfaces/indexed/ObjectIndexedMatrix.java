@@ -12,6 +12,7 @@ public interface ObjectIndexedMatrix<O, M extends Matrix<T>, T> {
 	public T set(O columnObj, O rowObj, T value);
 	public boolean checkEmpty(T obj);
 	public T representsEmpty();
+	public void setRepresentsEmpty(T obj);
 	
 	public Set<O> getColumnsObjects();
 	public void addColumn(O columnObj);

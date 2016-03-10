@@ -17,9 +17,12 @@ public abstract class AbstractMatrix<T> implements Matrix<T> {
 	private int rows;
 	protected T[][] matrix;
     
+	private T representsEmpty;
+	
     //XXX CONSTRUCTOR
 	public AbstractMatrix() {
 		this(0, 0);
+		this.representsEmpty = representsEmpty();
 	}
 	
 	public AbstractMatrix(int columns, int rows) {
@@ -127,10 +130,15 @@ public abstract class AbstractMatrix<T> implements Matrix<T> {
 	@Override
 	public boolean checkEmpty(T obj) {
 		if(obj == null){
-			return ( representsEmpty() == null );
+			return ( representsEmpty == null );
 		}
 		
-		return obj.equals(representsEmpty());
+		return obj.equals(representsEmpty);
+	}
+	
+	@Override
+	public void setRepresentsEmpty(T obj) {
+		this.representsEmpty = obj;
 	}
 	
 	@Override

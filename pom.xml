@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>br.com.xavier</groupId>
 	<artifactId>Matrix</artifactId>
-	<version>1.1.4</version>
+	<version>1.2.0</version>
 	
 	<build>
 		<plugins>
@@ -16,6 +16,20 @@
 					<target>1.8</target>
 				</configuration>
 			</plugin>
+			
+		    <plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			
 		</plugins>
 	</build>
 	

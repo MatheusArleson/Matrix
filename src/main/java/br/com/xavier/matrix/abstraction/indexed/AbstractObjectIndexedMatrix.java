@@ -25,11 +25,15 @@ public abstract class AbstractObjectIndexedMatrix<O, M extends AbstractMatrix<T>
 	private IndexAwareSet<O> rowsObjectsSet;
 	private IndexAwareSet<O> columnsObjectsSet;
 	
+	private T representsEmpty;
+	
 	//XXX CONSTRUCTOR
 	public AbstractObjectIndexedMatrix() throws Exception {
 		getMatrixClass();
 		getMatrixInstance();
 		clearInternalStructure();
+		
+		this.representsEmpty = representsEmpty();
 	}
 	
 	public AbstractObjectIndexedMatrix(LinkedHashSet<O> rowsSet, LinkedHashSet<O> columnsSet, M matrix) throws Exception {
@@ -38,6 +42,8 @@ public abstract class AbstractObjectIndexedMatrix<O, M extends AbstractMatrix<T>
 		this.matrix = matrix;
 		this.rowsObjectsSet = new IndexAwareSet<O>(rowsSet);
 		this.columnsObjectsSet = new IndexAwareSet<O>(columnsSet);
+		
+		this.representsEmpty = representsEmpty();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -128,10 +134,15 @@ public abstract class AbstractObjectIndexedMatrix<O, M extends AbstractMatrix<T>
 	@Override
 	public boolean checkEmpty(T obj) {
 		if(obj == null){
-			return ( representsEmpty() == null );
+			return ( representsEmpty == null );
 		}
 		
-		return obj.equals(representsEmpty());
+		return obj.equals(representsEmpty);
+	}
+	
+	@Override
+	public void setRepresentsEmpty(T obj) {
+		this.representsEmpty = obj;
 	}
 
 	//ROW METHODS

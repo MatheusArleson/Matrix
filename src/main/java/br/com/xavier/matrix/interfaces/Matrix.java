@@ -15,6 +15,7 @@ public abstract interface Matrix<T> {
 	public T set(int column, int row, T obj);
 	public boolean checkEmpty(T obj);
 	public T representsEmpty();
+	public void setRepresentsEmpty(T obj);
 	public int getColumnCount();
 	public int getRowCount();
 	
